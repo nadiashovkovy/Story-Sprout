@@ -46,10 +46,15 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           {/* Left Column - Text Content */}
           <div className="space-y-8">
             <div className="space-y-6">
+              <img 
+                src="/src/assets/StorySproutTransparent.png" 
+                alt="StorySprout" 
+                className="h-20"
+              />
               <Badge className="bg-white text-gray-800 px-4 py-2">
                 World's First Inclusive AI Storytelling
               </Badge>
-              <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
+              <h1 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
                 Every Child is the <span className="text-[#749fff]">Hero</span>
               </h1>
               <p className="text-xl text-white/90 leading-relaxed max-w-2xl">

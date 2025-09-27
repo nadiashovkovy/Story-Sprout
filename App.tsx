@@ -2,6 +2,7 @@ import { useState } from "react";
 import { HomeScreen } from "./src/components/HomeScreen";
 import { CharacterCreation } from "./src/components/CharacterCreation";
 import { InteractiveStory } from "./src/components/InteractiveStory";
+import "@fontsource/poppins";
 
 export interface CharacterData {
   name: string;
