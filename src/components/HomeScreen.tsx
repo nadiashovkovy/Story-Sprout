@@ -2,7 +2,8 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
-import { Users, Globe, Accessibility, Trophy, ChevronRight } from "lucide-react";
+import { Users, Globe, Accessibility, Trophy, ChevronRight, ChevronLeft } from "lucide-react";
+import { useState } from "react";
 
 interface HomeScreenProps {
   onNavigate: (screen: "home" | "character" | "story") => void;
@@ -16,6 +17,22 @@ interface HomeScreenProps {
 
 export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
   const progressPercentage = (storyProgress.storiesCompleted % 3) * 33.33;
+  const [currentSlide, setCurrentSlide] = useState(0);
+  
+  const storyPaths = [
+    { id: 'forest-adventure', title: 'Enchanted Forest', icon: '/src/assets/forest.png', unlocked: true },
+    { id: 'ocean-depths', title: 'Ocean Depths', icon: '/src/assets/ocean.png', unlocked: storyProgress.storiesCompleted >= 3 },
+    { id: 'space-journey', title: 'Space Journey', icon: '/src/assets/rocket.png', unlocked: storyProgress.storiesCompleted >= 6 },
+    { id: 'pirate-adventure', title: 'Pirate Voyage', icon: '/src/assets/treasure.png', unlocked: storyProgress.storiesCompleted >= 9 }
+  ];
+
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % storyPaths.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + storyPaths.length) % storyPaths.length);
+  };
   
   return (
     <div className="min-h-screen">
@@ -61,27 +78,6 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                 The world's first inclusive, adaptive AI storytelling app that makes every child the hero — 
                 reflecting their unique identity, abilities, and imagination.
               </p>
-            </div>
-
-            {/* Key Features */}
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card className="bg-white/95 backdrop-blur p-6 rounded-2xl border-0">
-                <Users className="w-8 h-8 text-[#749fff] mb-3" />
-                <h3 className="font-semibold text-gray-800 mb-2">Cultural Celebration</h3>
-                <p className="text-sm text-gray-600">Stories that honor diverse backgrounds and traditions</p>
-              </Card>
-              
-              <Card className="bg-white/95 backdrop-blur p-6 rounded-2xl border-0">
-                <Accessibility className="w-8 h-8 text-[#ffd6a5] mb-3" />
-                <h3 className="font-semibold text-gray-800 mb-2">Disability Representation</h3>
-                <p className="text-sm text-gray-600">Heroes with wheelchairs, hearing aids, and more</p>
-              </Card>
-              
-              <Card className="bg-white/95 backdrop-blur p-6 rounded-2xl border-0">
-                <Globe className="w-8 h-8 text-[#cadbf1] mb-3" />
-                <h3 className="font-semibold text-gray-800 mb-2">Interactive Adventures</h3>
-                <p className="text-sm text-gray-600">Make choices that change your story's path</p>
-              </Card>
             </div>
 
             {/* CTA Section */}
@@ -131,20 +127,128 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
         </div>
       </section>
 
+      {/* Key Features */}
+      <section className="max-w-7xl mx-auto px-6 py-2">
+        <div className="grid md:grid-cols-3 lg:grid-cols-3 gap-6">
+          <Card className="bg-white/95 backdrop-blur p-6 rounded-2xl border-0">
+            <Users className="w-8 h-8 text-[#749fff] mb-3" />
+            <h3 className="font-semibold text-gray-800 mb-2">Cultural Celebration</h3>
+            <p className="text-sm text-gray-600">Stories that honor diverse backgrounds and traditions</p>
+          </Card>
+          
+          <Card className="bg-white/95 backdrop-blur p-6 rounded-2xl border-0">
+            <Accessibility className="w-8 h-8 text-[#ffd6a5] mb-3" />
+            <h3 className="font-semibold text-gray-800 mb-2">Disability Representation</h3>
+            <p className="text-sm text-gray-600">Heroes with wheelchairs, hearing aids, and more</p>
+          </Card>
+          
+          <Card className="bg-white/95 backdrop-blur p-6 rounded-2xl border-0">
+            <Globe className="w-8 h-8 text-[#cadbf1] mb-3" />
+            <h3 className="font-semibold text-gray-800 mb-2">Interactive Adventures</h3>
+            <p className="text-sm text-gray-600">Make choices that change your story's path</p>
+          </Card>
+        </div>
+        </section>
+
       {/* Story Paths Section */}
       {storyProgress.pathsUnlocked.length > 0 && (
         <section className="max-w-7xl mx-auto px-6 py-16">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-white mb-4">Your Unlocked Adventures</h2>
+            <h2 className="text-3xl font-bold text-white mb-4">Choose From Pre-Generated Stories</h2>
             <p className="text-white/80">Choose your next magical journey</p>
+          </div>
+          
+          {/* Slideshow Container */}
+          <div className="relative">
+            {/* Navigation Arrows */}
+            <button
+              onClick={prevSlide}
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/20 backdrop-blur-sm rounded-full p-3 text-white hover:bg-white/30 transition-all"
+            >
+              <ChevronLeft className="w-6 h-6" />
+            </button>
+            
+            <button
+              onClick={nextSlide}
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/20 backdrop-blur-sm rounded-full p-3 text-white hover:bg-white/30 transition-all"
+            >
+              <ChevronRight className="w-6 h-6" />
+            </button>
+
+            {/* Slides Container */}
+            <div className=" rounded-2xl">
+              <div 
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+              >
+                {storyPaths.map((path, index) => (
+                  <div key={path.id} className="w-full flex-shrink-0 px-4">
+                    <Card 
+                      className={`p-6 rounded-2xl transition-all cursor-pointer mx-auto ${
+                        path.unlocked 
+                          ? 'bg-[white]/80 backdrop-blur hover:scale-105 shadow-lg' 
+                          : 'bg-[white]/80 backdrop-blur opacity-60'
+                      }`}
+                      onClick={() => path.unlocked && onNavigate('story')}
+                    >
+                      <div className="flex items-center space-x-20">
+                        <div className="flex justify-center items-center flex-shrink-0 pl-10">
+                          <img 
+                            src={path.icon} 
+                            alt={path.title}
+                            className="w-30 h-30 object-contain"
+                          />
+                        </div>
+                        <div className="flex-1 text-left pr-10">
+                          <h3 className="font-bold text-gray-800 mb-3 text-2xl">{path.title}</h3>
+                          {path.unlocked ? (
+                            <Badge className="bg-[#cadbf1] text-[#749fff] text-md px-4 py-2">Available</Badge>
+                          ) : (
+                            <Badge variant="secondary" className="text-md px-6">Locked</Badge>
+                          )}
+                        </div>
+                      </div>
+                    </Card>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Slide Indicators */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {storyPaths.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentSlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${
+                    index === currentSlide 
+                      ? 'bg-white shadow-lg' 
+                      : 'bg-white/50 hover:bg-white/70'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Genre Paths Section */}
+      {storyProgress.pathsUnlocked.length > 0 && (
+        <section className="max-w-7xl mx-auto px-6 py-16">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-white mb-4">Or Build One From Scratch</h2>
+            <p className="text-white/80">Choose a genre below</p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { id: 'forest-adventure', title: 'Enchanted Forest', icon: '🌲', unlocked: true },
-              { id: 'ocean-depths', title: 'Ocean Depths', icon: '🌊', unlocked: storyProgress.storiesCompleted >= 3 },
-              { id: 'space-journey', title: 'Space Journey', icon: '🚀', unlocked: storyProgress.storiesCompleted >= 6 },
-              { id: 'time-travel', title: 'Time Travel', icon: '⏰', unlocked: storyProgress.storiesCompleted >= 9 }
+              { id: 'forest-adventure', title: 'Fantasy', icon: '🌲', unlocked: true },
+              { id: 'ocean-depths', title: 'Sci-Fi', icon: '🌊', unlocked: true },
+              { id: 'space-journey', title: 'Mystery', icon: '🚀', unlocked: true },
+              { id: 'time-travel', title: 'Comedy', icon: '⏰', unlocked: true },
+              { id: 'time-travel', title: 'Action', icon: '⏰', unlocked: true },
+              { id: 'time-travel', title: 'Slice of Life', icon: '⏰', unlocked: true },
+              { id: 'time-travel', title: 'Random', icon: '?', unlocked: true }
             ].map((path) => (
               <Card 
                 key={path.id}
