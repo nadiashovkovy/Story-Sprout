@@ -2,7 +2,10 @@ import { useState } from "react";
 import { HomeScreen } from "./src/components/HomeScreen";
 import { CharacterCreation } from "./src/components/CharacterCreation";
 import { InteractiveStory } from "./src/components/InteractiveStory";
-import "@fontsource/poppins";
+import "@fontsource/poppins/400.css";
+import "@fontsource/poppins/500.css";
+import "@fontsource/poppins/600.css";
+import "@fontsource/poppins/700.css";
 
 export interface CharacterData {
   name: string;
@@ -82,7 +85,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#ffd6a5] via-[#cadbf1] to-[#749fff]">
+    <div className="min-h-screen bg-gradient-to-br from-[#ffd6a5] via-[#cadbf1] to-[#749fff] font-sans" style={{ fontFamily: 'Poppins, ui-sans-serif, system-ui' }}>
       {currentScreen === "home" && (
         <HomeScreen
           onNavigate={handleNavigate}

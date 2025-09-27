@@ -20,10 +20,34 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   
   const storyPaths = [
-    { id: 'forest-adventure', title: 'Enchanted Forest', icon: '/src/assets/forest.png', unlocked: true },
-    { id: 'ocean-depths', title: 'Ocean Depths', icon: '/src/assets/ocean.png', unlocked: storyProgress.storiesCompleted >= 3 },
-    { id: 'space-journey', title: 'Space Journey', icon: '/src/assets/rocket.png', unlocked: storyProgress.storiesCompleted >= 6 },
-    { id: 'pirate-adventure', title: 'Pirate Voyage', icon: '/src/assets/treasure.png', unlocked: storyProgress.storiesCompleted >= 9 }
+    { 
+      id: 'forest-adventure', 
+      title: 'Enchanted Forest', 
+      icon: '/src/assets/forest.png', 
+      description: 'Journey through magical woodlands filled with talking animals and mysterious creatures. Discover ancient secrets hidden within the heart of an enchanted realm.',
+      unlocked: true 
+    },
+    { 
+      id: 'ocean-depths', 
+      title: 'Ocean Depths', 
+      icon: '/src/assets/ocean.png', 
+      description: 'Dive beneath the waves to explore underwater kingdoms and coral cities. Meet mermaids, dolphins, and sea creatures on an aquatic adventure.',
+      unlocked: storyProgress.storiesCompleted >= 3 
+    },
+    { 
+      id: 'space-journey', 
+      title: 'Space Journey', 
+      icon: '/src/assets/rocket.png', 
+      description: 'Blast off to distant planets and explore alien worlds among the stars. Navigate asteroid fields and make contact with friendly extraterrestrial beings.',
+      unlocked: storyProgress.storiesCompleted >= 6 
+    },
+    { 
+      id: 'pirate-adventure', 
+      title: 'Pirate Voyage', 
+      icon: '/src/assets/treasure.png', 
+      description: 'Set sail on the high seas in search of legendary buried treasure. Navigate dangerous waters and outwit rival pirates on your quest for gold.',
+      unlocked: storyProgress.storiesCompleted >= 9 
+    }
   ];
 
   const nextSlide = () => {
@@ -48,7 +72,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
               />
             </div>
             <div className="hidden md:flex items-center space-x-6">
-              <span className="text-gray-600">Level {storyProgress.currentLevel}</span>
+              <span className="text-gray-600">Reading Level: {storyProgress.currentLevel}</span>
               <Badge variant="secondary" className="bg-[#cadbf1] text-[#749fff]">
                 {storyProgress.storiesCompleted} Stories Completed
               </Badge>
@@ -63,6 +87,11 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           {/* Left Column - Text Content */}
           <div className="space-y-8">
             <div className="space-y-6">
+              <img 
+                src="/src/assets/StorySproutLogoTransparent.png" 
+                alt="StorySprout" 
+                className="h-20"
+              />
               <img 
                 src="/src/assets/StorySproutTransparent.png" 
                 alt="StorySprout" 
@@ -117,7 +146,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                     <h4 className="font-semibold text-gray-800">Reading Progress</h4>
                     <div className="flex items-center space-x-2 mt-2">
                       <Progress value={progressPercentage} className="w-24" />
-                      <span className="text-sm text-gray-600">Level {storyProgress.currentLevel}</span>
+                      <span className="text-sm text-gray-600">Reading Level {storyProgress.currentLevel}</span>
                     </div>
                   </div>
                 </div>
@@ -160,37 +189,43 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           
           {/* Slideshow Container */}
           <div className="relative">
-            {/* Navigation Arrows */}
-            <button
-              onClick={prevSlide}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/20 backdrop-blur-sm rounded-full p-3 text-white hover:bg-white/30 transition-all"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            
-            <button
-              onClick={nextSlide}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/20 backdrop-blur-sm rounded-full p-3 text-white hover:bg-white/30 transition-all"
-            >
-              <ChevronRight className="w-6 h-6" />
-            </button>
-
             {/* Slides Container */}
-            <div className=" rounded-2xl">
+            <div className="rounded-2xl">
               <div 
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
               >
-                {storyPaths.map((path, index) => (
+                {storyPaths.map((path) => (
                   <div key={path.id} className="w-full flex-shrink-0 px-4">
                     <Card 
-                      className={`p-6 rounded-2xl transition-all cursor-pointer mx-auto ${
+                      className={`p-6 rounded-2xl transition-all cursor-pointer mx-auto relative ${
                         path.unlocked 
                           ? 'bg-[white]/80 backdrop-blur hover:scale-105 shadow-lg' 
                           : 'bg-[white]/80 backdrop-blur opacity-60'
                       }`}
                       onClick={() => path.unlocked && onNavigate('story')}
                     >
+                      {/* Navigation Arrows Inside Card */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          prevSlide();
+                        }}
+                        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-gray-200/80 backdrop-blur-sm rounded-full p-2 text-gray-700 hover:bg-gray-300/80 transition-all"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </button>
+                      
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          nextSlide();
+                        }}
+                        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-gray-200/80 backdrop-blur-sm rounded-full p-2 text-gray-700 hover:bg-gray-300/80 transition-all"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </button>
+
                       <div className="flex items-center space-x-20">
                         <div className="flex justify-center items-center flex-shrink-0 pl-10">
                           <img 
@@ -200,7 +235,8 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                           />
                         </div>
                         <div className="flex-1 text-left pr-10">
-                          <h3 className="font-bold text-gray-800 mb-3 text-2xl">{path.title}</h3>
+                          <h3 className="font-bold text-gray-800 mb-2 text-2xl">{path.title}</h3>
+                          <p className="text-gray-600 mb-4 text-sm leading-relaxed">{path.description}</p>
                           {path.unlocked ? (
                             <Badge className="bg-[#cadbf1] text-[#749fff] text-md px-4 py-2">Available</Badge>
                           ) : (
@@ -242,13 +278,13 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { id: 'forest-adventure', title: 'Fantasy', icon: '🌲', unlocked: true },
-              { id: 'ocean-depths', title: 'Sci-Fi', icon: '🌊', unlocked: true },
-              { id: 'space-journey', title: 'Mystery', icon: '🚀', unlocked: true },
-              { id: 'time-travel', title: 'Comedy', icon: '⏰', unlocked: true },
-              { id: 'time-travel', title: 'Action', icon: '⏰', unlocked: true },
-              { id: 'time-travel', title: 'Slice of Life', icon: '⏰', unlocked: true },
-              { id: 'time-travel', title: 'Random', icon: '?', unlocked: true }
+              { id: 'fantasy', title: 'Fantasy', icon: '/src/assets/castle.png', unlocked: true },
+              { id: 'sci-fi', title: 'Sci-Fi', icon: '/src/assets/ufo.png', unlocked: true },
+              { id: 'mystery', title: 'Mystery', icon: '/src/assets/magnify.png', unlocked: true },
+              { id: 'comedy', title: 'Comedy', icon: '/src/assets/comedy.png', unlocked: true },
+              { id: 'action', title: 'Action', icon: '/src/assets/action.png', unlocked: true },
+              { id: 'slice-of-life', title: 'Slice of Life', icon: '/src/assets/slice.png', unlocked: true },
+              { id: 'random', title: 'Random', icon: '/src/assets/question.png', unlocked: true }
             ].map((path) => (
               <Card 
                 key={path.id}
@@ -259,7 +295,13 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                 }`}
                 onClick={() => path.unlocked && onNavigate('story')}
               >
-                <div className="text-4xl mb-3">{path.icon}</div>
+                <div className="flex justify-center items-center mb-3 h-16">
+                  <img 
+                    src={path.icon} 
+                    alt={path.title}
+                    className="w-20 h-20 object-contain"
+                  />
+                </div>
                 <h3 className="font-semibold text-gray-800 mb-2">{path.title}</h3>
                 {path.unlocked ? (
                   <Badge className="bg-[#cadbf1] text-[#749fff]">Available</Badge>
