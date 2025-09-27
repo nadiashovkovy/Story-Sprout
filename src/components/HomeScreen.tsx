@@ -6,7 +6,7 @@ import { BookOpen, Star, Users, Globe, Accessibility, Trophy, ChevronRight } fro
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 interface HomeScreenProps {
-  onNavigate: (screen: string) => void;
+  onNavigate: (screen: "home" | "character" | "story") => void;
   storyProgress: {
     storiesCompleted: number;
     pathsUnlocked: string[];

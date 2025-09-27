@@ -5,10 +5,10 @@ import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
 import { ArrowLeft, BookOpen, Volume2, Star, Trophy, RotateCcw } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { CharacterData, StoryProgress } from "../App";
+import { CharacterData, StoryProgress } from "../../App";
 
 interface InteractiveStoryProps {
-  onNavigate: (screen: string) => void;
+  onNavigate: (screen: "home" | "character" | "story") => void;
   character: CharacterData;
   storyProgress: StoryProgress;
   onStoryComplete: (storyId: string, choicesMade: number) => void;

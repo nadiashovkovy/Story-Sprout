@@ -4,10 +4,10 @@ import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Checkbox } from "./ui/checkbox";
 import { ArrowLeft, Check, Users, Globe, Heart } from "lucide-react";
-import { CharacterData } from "../App";
+import { CharacterData } from "../../App";
 
 interface CharacterCreationProps {
-  onNavigate: (screen: string) => void;
+  onNavigate: (screen: "home" | "character" | "story") => void;
   onCharacterComplete: (character: CharacterData) => void;
   existingCharacter: CharacterData;
 }
@@ -246,7 +246,7 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
                     <Checkbox
                       id={option.id}
                       checked={character.accessibility.includes(option.id)}
-                      onCheckedChange={(checked) => handleAccessibilityChange(option.id, checked as boolean)}
+                      onCheckedChange={(checked: boolean) => handleAccessibilityChange(option.id, checked)}
                       className="data-[state=checked]:bg-[#749fff]"
                     />
                     <label htmlFor={option.id} className="text-sm text-gray-700 cursor-pointer flex items-center space-x-2">
