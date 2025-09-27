@@ -2,8 +2,7 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
-import { BookOpen, Star, Users, Globe, Accessibility, Trophy, ChevronRight } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { Users, Globe, Accessibility, Trophy, ChevronRight } from "lucide-react";
 
 interface HomeScreenProps {
   onNavigate: (screen: "home" | "character" | "story") => void;
@@ -25,8 +24,11 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <BookOpen className="w-8 h-8 text-[#749fff]" />
-              <h1 className="text-2xl font-bold text-gray-800">StorySprout</h1>
+              <img 
+                src="/src/assets/StorySproutWideTransparent.png" 
+                alt="StorySprout" 
+                className="h-8"
+              />
             </div>
             <div className="hidden md:flex items-center space-x-6">
               <span className="text-gray-600">Level {storyProgress.currentLevel}</span>
@@ -44,7 +46,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           {/* Left Column - Text Content */}
           <div className="space-y-8">
             <div className="space-y-6">
-              <Badge className="bg-[#ffd6a5] text-gray-800 px-4 py-2">
+              <Badge className="bg-white text-gray-800 px-4 py-2">
                 World's First Inclusive AI Storytelling
               </Badge>
               <h1 className="text-5xl lg:text-6xl font-bold text-white leading-tight">
@@ -103,13 +105,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
 
           {/* Right Column - Hero Image */}
           <div className="relative">
-            <Card className="rounded-3xl overflow-hidden shadow-2xl">
-              <ImageWithFallback
-                src="https://images.unsplash.com/photo-1716324339623-384495f47373?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxpbmNsdXNpdmUlMjBkaXZlcnNlJTIwY2hpbGRyZW4lMjByZWFkaW5nfGVufDF8fHx8MTc1ODk5ODgyOXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral"
-                alt="Diverse children reading together"
-                className="w-full h-[500px] object-cover"
-              />
-            </Card>
+            
             
             {/* Floating Progress Card */}
             {storyProgress.storiesCompleted > 0 && (
@@ -172,8 +168,11 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
         <div className="max-w-7xl mx-auto px-6 py-12">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-4">
-              <BookOpen className="w-6 h-6 text-white" />
-              <span className="text-white font-semibold">StorySprout</span>
+              <img 
+                src="/src/assets/StorySproutLogoTransparent.png" 
+                alt="StorySprout" 
+                className="h-8"
+              />
             </div>
             <p className="text-white/70 text-sm">
               Celebrating every child's unique story, one adventure at a time.
