@@ -116,13 +116,17 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
   };
 
   const handleNext = () => {
-    if (character.name && character.skinTone && character.hairStyle && character.hairColor) {
-      onCharacterComplete(character);
+    if (character.skinTone && character.hairStyle && character.hairColor) {
+      const finalCharacter = {
+        ...character,
+        name: character.name.trim() || 'User' // Default to 'User' if name is empty
+      };
+      onCharacterComplete(finalCharacter);
       onNavigate('story');
     }
   };
 
-  const isComplete = character.name && character.skinTone && character.hairStyle && character.hairColor;
+  const isComplete = character.skinTone && character.hairStyle && character.hairColor;
 
   return (
     <div className="min-h-screen">

@@ -7,6 +7,14 @@ import { ArrowLeft, BookOpen, Volume2, Star, Trophy, RotateCcw } from "lucide-re
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { CharacterData, StoryProgress } from "../../App";
 
+// Import story images
+import enchantedForest from "../assets/enchantedforest.png";
+import unicornInForestImg from "../assets/unicorninforest.png";
+import crystalCave from "../assets/crystalcave.png";
+import dragon from "../assets/dragoninforest.png";
+import confetti from "../assets/confetti.png"
+
+
 interface InteractiveStoryProps {
   onNavigate: (screen: "home" | "character" | "story") => void;
   character: CharacterData;
@@ -51,7 +59,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       start: {
         id: 'start',
         text: `${character.name} stepped into the enchanted forest, where sunbeams danced through emerald leaves.${accessibilityText} The air shimmered with magic, and whispered voices seemed to call from deeper within the woods. ${personalityBonus}, ${character.name} noticed three different paths ahead.`,
-        illustration: "https://cdn.openart.ai/uploads/image_5SgQNeFF_1759017934164_raw.jpg",
+        illustration: enchantedForest,
         choices: [
           { id: 'crystal_path', text: 'Follow the sparkling crystal path', nextNodeId: 'crystal_cave' },
           { id: 'musical_path', text: 'Follow the path with beautiful music', nextNodeId: 'singing_grove' },
@@ -61,7 +69,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       crystal_cave: {
         id: 'crystal_cave',
         text: `The crystal path led ${character.name} to a magnificent cave filled with glowing gems. Each crystal hummed with a different musical note. An ancient dragon sat among the crystals, looking sad. "I've lost my voice," the dragon explained. "Without it, I cannot sing the crystals to life and bring joy to the forest."`,
-        illustration: "https://cdn.openart.ai/uploads/image_5SgQNeFF_1759017934164_raw.jpg",
+        illustration: crystalCave,
         choices: [
           { id: 'sing_for_dragon', text: 'Offer to sing for the dragon', nextNodeId: 'harmony_ending' },
           { id: 'find_voice', text: 'Search for the dragon\'s lost voice', nextNodeId: 'voice_quest' },
@@ -76,7 +84,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       singing_grove: {
         id: 'singing_grove',
         text: `${character.name} discovered a grove where the trees themselves were singing a haunting melody. In the center, a unicorn stood trapped in a cage of thorny vines. The vines seemed to respond to the music, tightening when the song was sad and loosening when it was joyful. The unicorn looked at ${character.name} with hopeful eyes.`,
-        illustration: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWdpY2FsJTIwdW5pY29ybnxlbnwwfHx8fDE3NTg5OTg4NDh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        illustration: unicornInForestImg,
         choices: [
           { id: 'change_song', text: 'Try to change the trees\' song to be happier', nextNodeId: 'musical_ending' },
           { id: 'cut_vines', text: 'Look for something to cut the vines', nextNodeId: 'tool_search' },
@@ -106,7 +114,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       harmony_ending: {
         id: 'harmony_ending',
         text: `${character.name} began to sing, and their voice harmonized perfectly with the crystal resonance. The dragon's eyes filled with tears of joy as the crystals began to glow brighter than ever before. "Your voice has given me something even better than my own," the dragon said. "You've shown me that different voices can create the most beautiful harmony." The forest filled with magical light, and all the creatures celebrated ${character.name}'s gift of bringing harmony to the world.`,
-        illustration: "https://images.unsplash.com/photo-1518837695005-2083093ee35b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcnlzdGFsJTIwaGFybW9ueXxlbnwwfHx8fDE3NTg5OTg4NTd8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        illustration: dragon, 
         choices: [],
         isEnding: true
       },
@@ -138,7 +146,6 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
   const currentNode = storyNodes[currentNodeId];
 
   const handleChoice = (choice: Choice) => {
-    // Check if choice requires specific accessibility features
     if (choice.requiresAccessibility && 
         !choice.requiresAccessibility.some(req => character.accessibility.includes(req))) {
       return; // Choice not available
@@ -148,7 +155,8 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
     setChoicesMade(prev => prev + 1);
     setStoryPath(prev => [...prev, choice.nextNodeId]);
 
-    // If this leads to an ending, mark story as complete
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     if (storyNodes[choice.nextNodeId]?.isEnding) {
       setTimeout(() => {
         onStoryComplete('forest-adventure', choicesMade + 1);
@@ -203,7 +211,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
               <ImageWithFallback
                 src={currentNode.illustration}
                 alt="Story illustration"
-                className="w-full h-[400px] object-cover"
+                className="w-full h-[600px] object-cover"
               />
             </Card>
             
@@ -345,7 +353,13 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
               ) : (
                 // Ending screen
                 <div className="text-center space-y-6">
-                  <div className="text-6xl">🎉</div>
+                  <div className="flex justify-center">
+                    <img 
+                      src={confetti} 
+                      alt="Celebration confetti" 
+                      className="w-35 h-35 object-contain"
+                    />
+                  </div>
                   <div>
                     <h3 className="text-xl font-bold text-gray-800 mb-2">Adventure Complete!</h3>
                     <p className="text-gray-600 mb-4">
