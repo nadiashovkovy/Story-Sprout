@@ -17,6 +17,7 @@ import confetti from "../assets/confetti.png"
 import rainbow from "../assets/rainbowflowers.png"
 import butterfly from "../assets/butterfly.png"
 import seasprite from "../assets/seasprite.png"
+import fairy from "../assets/fairy.png"
 
 
 interface InteractiveStoryProps {
@@ -196,8 +197,8 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       },
       sign_ending: {
         id: 'sign_ending',
-        text: dragon,
-        illustration: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcnlzdGFsJTIwY2F2ZXxlbnwwfHx8fDE3NTg5OTg4NDV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        text: `Drawing from their own experience, ${character.name} patiently taught the dragon sign language. The dragon was amazed to discover this beautiful way of communication. When the dragon signed to the crystals, they responded with the most incredible light show the forest had ever seen! "You've given me something even more powerful than my voice," the dragon signed back. "You've shown me a whole new way to express the magic within." ${character.name} had created a new form of crystal magic that celebrated different ways of communication.`,
+        illustration: dragon, 
         choices: [],
         isEnding: true
       },
@@ -211,7 +212,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       wisdom_ending: {
         id: 'wisdom_ending',
         text: `The fairy granted ${character.name} the gift of wisdom. Suddenly, ${character.name} could understand the needs of every creature in the forest. They helped the lost baby deer find their family, taught the young trees how to grow strong, and showed the stream how to sing more beautifully. Word of ${character.name}'s wisdom spread throughout all the magical realms. ${character.name} became known as the Forest's Greatest Helper, and creatures from far and wide came to learn from their kindness and insight.`,
-        illustration: "https://images.unsplash.com/photo-1444927714506-8492d94b5ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWdpY2FsJTIwYnV0dGVyZmx5fGVufDB8fHx8MTc1ODk5ODg1MXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        illustration: fairy,
         choices: [],
         isEnding: true
       }
