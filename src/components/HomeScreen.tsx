@@ -73,6 +73,11 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + storyPaths.length) % storyPaths.length);
   };
+
+  const handleStoryNavigation = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    onNavigate('story');
+  };
   
   return (
     <div className="min-h-screen">
@@ -219,7 +224,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                           ? 'bg-[white]/80 backdrop-blur hover:scale-105 shadow-lg' 
                           : 'bg-[white]/80 backdrop-blur opacity-60'
                       }`}
-                      onClick={() => path.unlocked && onNavigate('story')}
+                      onClick={() => path.unlocked && handleStoryNavigation()}
                     >
                       {/* Navigation Arrows Inside Card */}
                       <button
@@ -309,7 +314,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                     ? 'bg-white/95 backdrop-blur hover:scale-105 shadow-lg' 
                     : 'bg-white/20 backdrop-blur opacity-60'
                 }`}
-                onClick={() => path.unlocked && onNavigate('story')}
+                onClick={() => path.unlocked && handleStoryNavigation()}
               >
                 <div className="flex justify-center items-center mb-3 h-16">
                   <img 
