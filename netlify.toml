@@ -1,0 +1,16 @@
+[build]
+  # Build command
+  command = "npm run build"
+  
+  # Directory to publish (where Vite outputs the built files)
+  publish = "dist"
+
+[build.environment]
+  # Node.js version
+  NODE_VERSION = "18"
+
+# Redirect all requests to index.html for SPA routing
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

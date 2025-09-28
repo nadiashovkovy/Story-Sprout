@@ -51,7 +51,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       start: {
         id: 'start',
         text: `${character.name} stepped into the enchanted forest, where sunbeams danced through emerald leaves.${accessibilityText} The air shimmered with magic, and whispered voices seemed to call from deeper within the woods. ${personalityBonus}, ${character.name} noticed three different paths ahead.`,
-        illustration: "https://images.unsplash.com/photo-1547140741-00d6fd251528?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxlbmNoYW50ZWQlMjBmb3Jlc3QlMjBtYWdpY2FsfGVufDF8fHx8MTc1ODk5OTAwMnww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        illustration: "https://cdn.openart.ai/uploads/image_5SgQNeFF_1759017934164_raw.jpg",
         choices: [
           { id: 'crystal_path', text: 'Follow the sparkling crystal path', nextNodeId: 'crystal_cave' },
           { id: 'musical_path', text: 'Follow the path with beautiful music', nextNodeId: 'singing_grove' },
@@ -206,6 +206,42 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
                 className="w-full h-[400px] object-cover"
               />
             </Card>
+            
+            {/* Print Link */}
+            <div className="text-center">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  const printWindow = window.open('', '_blank');
+                  if (printWindow) {
+                    printWindow.document.write(`
+                      <html>
+                        <head>
+                          <title>Story Coloring Page</title>
+                          <style>
+                            body { margin: 0; text-align: center; }
+                            img { max-width: 100%; height: auto; }
+                            @media print {
+                              body { margin: 0; }
+                              img { width: 100%; height: auto; page-break-inside: avoid; }
+                            }
+                          </style>
+                        </head>
+                        <body>
+                          <img src="${currentNode.illustration}" alt="Story coloring page" />
+                        </body>
+                      </html>
+                    `);
+                    printWindow.document.close();
+                    printWindow.print();
+                  }
+                }}
+                className="text-[#749fff] border-[#749fff] hover:bg-[#749fff] hover:text-white"
+              >
+                Print coloring page
+              </Button>
+            </div>
 
             {/* Character Info */}
             <Card className="bg-[#ede6db]/90 backdrop-blur rounded-2xl p-6">
@@ -283,7 +319,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
                           variant={isAvailable ? "default" : "secondary"}
                           className={`w-full p-4 h-auto text-left justify-start rounded-xl transition-all ${
                             isAvailable 
-                              ? 'bg-white hover:bg-[#749fff] hover:text-white border border-gray-200' 
+                              ? 'bg-[#749fff] hover:text-white border border-gray-200' 
                               : 'bg-gray-100 text-gray-400 cursor-not-allowed'
                           }`}
                         >
