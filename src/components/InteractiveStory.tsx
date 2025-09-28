@@ -136,20 +136,51 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
     // Ensure we have a valid name, fallback to "You" if needed
     const characterName = character.name?.trim() || 'You';
     
+    // Handle pronouns based on character selection
+    const getPronounSet = (pronounId: string) => {
+      switch (pronounId) {
+        case 'she-her':
+          return {
+            subject: 'she',
+            object: 'her',
+            possessive: 'her',
+            possessiveAdjective: 'her',
+            reflexive: 'herself'
+          };
+        case 'he-him':
+          return {
+            subject: 'he',
+            object: 'him',
+            possessive: 'his',
+            possessiveAdjective: 'his',
+            reflexive: 'himself'
+          };
+        case 'they-them':
+        case 'other':
+        default:
+          return {
+            subject: 'they',
+            object: 'them',
+            possessive: 'theirs',
+            possessiveAdjective: 'their',
+            reflexive: 'themselves'
+          };
+      }
+    };
+    
+    const pronouns = getPronounSet(character.pronouns || 'they-them');
+    
     // Handle grammar for "You" vs other names
     const verb = characterName === 'You' ? 'stepped' : 'stepped';
-    const possessive = characterName === 'You' ? 'your' : `${characterName}'s`;
-    const pronoun = characterName === 'You' ? 'you' : 'they';
-    const pronounCap = characterName === 'You' ? 'You' : 'They';
     
     const accessibilityText = character.accessibility.length > 0 
-      ? ` ${characterName} moved confidently ${character.accessibility.includes('wheelchair') ? 'in their wheelchair' : 
-          character.accessibility.includes('cane') ? 'with their helpful cane' : 
-          character.accessibility.includes('service-dog') ? 'alongside their loyal service dog' : ''}` 
+      ? ` ${characterName} moved confidently ${character.accessibility.includes('wheelchair') ? `in ${pronouns.possessiveAdjective} wheelchair` : 
+          character.accessibility.includes('cane') ? `with ${pronouns.possessiveAdjective} helpful cane` : 
+          character.accessibility.includes('service-dog') ? `alongside ${pronouns.possessiveAdjective} loyal service dog` : ''}` 
       : '';
 
-    const personalityBonus = character.personalityTrait === 'brave' ? 'with courage in their heart' :
-                             character.personalityTrait === 'kind' ? 'with kindness guiding their way' :
+    const personalityBonus = character.personalityTrait === 'brave' ? `with courage in ${pronouns.possessiveAdjective} heart` :
+                             character.personalityTrait === 'kind' ? `with kindness guiding ${pronouns.possessiveAdjective} way` :
                              character.personalityTrait === 'curious' ? 'eager to explore and learn' : '';
 
     return {
@@ -190,7 +221,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       },
       butterfly_friend: {
         id: 'butterfly_friend',
-        text: `${character.name} approached the small butterfly whose wing was caught under a fallen leaf. ${character.accessibility.includes('prosthetic') ? 'Using their prosthetic arm with extra care,' : ''} ${character.name} gently freed the butterfly. "Thank you!" the butterfly sparkled. "I'm actually a fairy! Because you helped me first, I can grant you a special wish to help with your adventure."`,
+        text: `${characterName} approached the small butterfly whose wing was caught under a fallen leaf. ${character.accessibility.includes('prosthetic') ? `Using ${pronouns.possessiveAdjective} prosthetic arm with extra care,` : ''} ${characterName} gently freed the butterfly. "Thank you!" the butterfly sparkled. "I'm actually a fairy! Because you helped me first, I can grant you a special wish to help with your adventure."`,
         illustration: butterfly,
         choices: [
           { id: 'wish_wisdom', text: 'Wish for wisdom to help others', nextNodeId: 'wisdom_ending' },
@@ -200,7 +231,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       },
       voice_quest: {
         id: 'voice_quest',
-        text: `${character.name} searched high and low and discovered that the dragon's voice was captured in a magical shell by a mischievous sea sprite. ${character.accessibility.includes('wheelchair') ? 'Racing through the forest paths,' : 'Running quickly,'} ${character.name} reached the sprite's pond. The sprite agreed to return the voice, but only if ${character.name} could solve their riddle.`,
+        text: `${characterName} searched high and low and discovered that the dragon's voice was captured in a magical shell by a mischievous sea sprite. ${character.accessibility.includes('wheelchair') ? 'Racing through the forest paths,' : 'Running quickly,'} ${characterName} reached the sprite's pond. The sprite agreed to return the voice, but only if ${characterName} could solve ${pronouns.possessiveAdjective} riddle.`,
         illustration: seasprite,
         choices: [
           { id: 'solve_riddle', text: 'Accept the riddle challenge', nextNodeId: 'riddle_ending' },
@@ -210,28 +241,28 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       },
       harmony_ending: {
         id: 'harmony_ending',
-        text: `${character.name} began to sing, and their voice harmonized perfectly with the crystal resonance. The dragon's eyes filled with tears of joy as the crystals began to glow brighter than ever before. "Your voice has given me something even better than my own," the dragon said. "You've shown me that different voices can create the most beautiful harmony." The forest filled with magical light, and all the creatures celebrated ${character.name}'s gift of bringing harmony to the world.`,
+        text: `${characterName} began to sing, and ${pronouns.possessiveAdjective} voice harmonized perfectly with the crystal resonance. The dragon's eyes filled with tears of joy as the crystals began to glow brighter than ever before. "Your voice has given me something even better than my own," the dragon said. "You've shown me that different voices can create the most beautiful harmony." The forest filled with magical light, and all the creatures celebrated ${characterName}'s gift of bringing harmony to the world.`,
         illustration: dragon, 
         choices: [],
         isEnding: true
       },
       sign_ending: {
         id: 'sign_ending',
-        text: `Drawing from their own experience, ${character.name} patiently taught the dragon sign language. The dragon was amazed to discover this beautiful way of communication. When the dragon signed to the crystals, they responded with the most incredible light show the forest had ever seen! "You've given me something even more powerful than my voice," the dragon signed back. "You've shown me a whole new way to express the magic within." ${character.name} had created a new form of crystal magic that celebrated different ways of communication.`,
+        text: `Drawing from ${pronouns.possessiveAdjective} own experience, ${characterName} patiently taught the dragon sign language. The dragon was amazed to discover this beautiful way of communication. When the dragon signed to the crystals, they responded with the most incredible light show the forest had ever seen! "You've given me something even more powerful than my voice," the dragon signed back. "You've shown me a whole new way to express the magic within." ${characterName} had created a new form of crystal magic that celebrated different ways of communication.`,
         illustration: dragon, 
         choices: [],
         isEnding: true
       },
       musical_ending: {
         id: 'musical_ending',
-        text: `${character.name} ${character.personalityTrait === 'artistic' ? 'used their creative spirit and' : ''} began to hum a joyful tune, and amazingly, the trees responded! Their song shifted from melancholy to pure happiness. The thorny vines loosened and dissolved into flower petals. The unicorn was free! "Your heart's music changed everything," the unicorn said gratefully. "${character.name}, you have the rare gift of bringing joy and freedom wherever you go." The entire grove bloomed with rainbow flowers in celebration.`,
+        text: `${characterName} ${character.personalityTrait === 'artistic' ? `used ${pronouns.possessiveAdjective} creative spirit and` : ''} began to hum a joyful tune, and amazingly, the trees responded! Their song shifted from melancholy to pure happiness. The thorny vines loosened and dissolved into flower petals. The unicorn was free! "Your heart's music changed everything," the unicorn said gratefully. "${characterName}, you have the rare gift of bringing joy and freedom wherever you go." The entire grove bloomed with rainbow flowers in celebration.`,
         illustration: rainbow,
         choices: [],
         isEnding: true
       },
       wisdom_ending: {
         id: 'wisdom_ending',
-        text: `The fairy granted ${character.name} the gift of wisdom. Suddenly, ${character.name} could understand the needs of every creature in the forest. They helped the lost baby deer find their family, taught the young trees how to grow strong, and showed the stream how to sing more beautifully. Word of ${character.name}'s wisdom spread throughout all the magical realms. ${character.name} became known as the Forest's Greatest Helper, and creatures from far and wide came to learn from their kindness and insight.`,
+        text: `The fairy granted ${characterName} the gift of wisdom. Suddenly, ${characterName} could understand the needs of every creature in the forest. ${pronouns.subject.charAt(0).toUpperCase() + pronouns.subject.slice(1)} helped the lost baby deer find their family, taught the young trees how to grow strong, and showed the stream how to sing more beautifully. Word of ${characterName}'s wisdom spread throughout all the magical realms. ${characterName} became known as the Forest's Greatest Helper, and creatures from far and wide came to learn from ${pronouns.possessiveAdjective} kindness and insight.`,
         illustration: fairy,
         choices: [],
         isEnding: true
