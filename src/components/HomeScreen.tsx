@@ -1,9 +1,9 @@
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Progress } from "./ui/progress";
-import { Users, Globe, Accessibility, Trophy, ChevronRight, ChevronLeft, LockKeyholeOpen, LockKeyhole } from "lucide-react";
+import { Users, Globe, Accessibility, ChevronRight, ChevronLeft, LockKeyholeOpen, LockKeyhole } from "lucide-react";
 import { useState } from "react";
+import { CharacterData } from "../../App";
 
 // Import assets
 import forestImg from "../assets/forest.png";
@@ -29,10 +29,10 @@ interface HomeScreenProps {
     currentLevel: number;
     achievements: string[];
   };
+  character: CharacterData;
 }
 
-export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
-  const progressPercentage = (storyProgress.storiesCompleted % 3) * 33.33;
+export function HomeScreen({ onNavigate, storyProgress, character }: HomeScreenProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   
   const storyPaths = [
@@ -93,7 +93,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
               />
             </div>
             <div className="hidden md:flex items-center space-x-6">
-              <span className="text-gray-600">Reading Level: {storyProgress.currentLevel}</span>
+              <span className="text-gray-600">{character.name ? `${character.name}'s` : "Your"} Reading Level: {storyProgress.currentLevel}</span>
               <Badge variant="secondary" className="bg-[#cadbf1] text-[#749fff]">
                 {storyProgress.storiesCompleted} Stories Completed
               </Badge>
@@ -146,7 +146,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                   onClick={() => onNavigate('story')}
                   variant="outline"
                   size="lg"
-                  className="bg-white/20 text-white border-white/30 hover:bg-white/30 px-8 py-4 rounded-2xl"
+                  className="bg-white/50 text-grey border-white/30 hover:bg-white/30 px-8 py-4 rounded-2xl"
                 >
                   Continue Adventure
                 </Button>
@@ -157,25 +157,11 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           {/* Right Column - Hero Image */}
           <div className="relative">
             
-            
-            {/* Floating Progress Card */}
-            {storyProgress.storiesCompleted > 0 && (
-              <Card className="absolute -bottom-6 -left-6 bg-white/95 backdrop-blur p-6 rounded-2xl shadow-lg">
-                <div className="flex items-center space-x-4">
-                  <Trophy className="w-8 h-8 text-[#ffd6a5]" />
-                  <div>
-                    <h4 className="font-semibold text-gray-800">Reading Progress</h4>
-                    <div className="flex items-center space-x-2 mt-2">
-                      <Progress value={progressPercentage} className="w-24" />
-                      <span className="text-sm text-gray-600">Reading Level {storyProgress.currentLevel}</span>
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            )}
+          
           </div>
         </div>
       </section>
+      
 
       {/* Key Features */}
       <section className="max-w-7xl mx-auto px-6 py-2">

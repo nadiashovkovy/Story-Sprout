@@ -90,6 +90,7 @@ export default function App() {
         <HomeScreen
           onNavigate={handleNavigate}
           storyProgress={storyProgress}
+          character={character}
         />
       )}
 

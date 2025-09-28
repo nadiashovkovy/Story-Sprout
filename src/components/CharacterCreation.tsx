@@ -27,13 +27,14 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
   );
 
   const skinTones = [
-    { id: 'very-light', color: '#FDBCB4', name: 'Very Light' },
+    { id: 'fair-light', color: '#fde2b4ff', name: 'Fair Light' },
     { id: 'light', color: '#F1C27D', name: 'Light' },
     { id: 'light-medium', color: '#E0AC69', name: 'Light Medium' },
     { id: 'medium', color: '#C68642', name: 'Medium' },
-    { id: 'medium-dark', color: '#A0522D', name: 'Medium Dark' },
-    { id: 'dark', color: '#8B4513', name: 'Dark' },
-    { id: 'very-dark', color: '#654321', name: 'Very Dark' }
+    { id: 'medium-brown', color: '#A0522D', name: 'Medium Brown' },
+    { id: 'brown', color: '#8B4513', name: 'Brown' },
+    { id: 'deep-brown', color: '#654321', name: 'Deep Brown' },
+    { id: 'dark', color: '#493116ff', name: 'Dark Brown' }
   ];
 
   const hairStyles = [
@@ -46,7 +47,9 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
     { id: 'afro', name: 'Afro' },
     { id: 'ponytail', name: 'Ponytail' },
     { id: 'bun', name: 'Bun' },
-    { id: 'pixie', name: 'Pixie Cut' }
+    { id: 'pixie', name: 'Pixie Cut' },
+    { id: 'buzz', name: 'Buzz Cut' },
+    { id: 'hijab', name: 'Hijab' }
   ];
 
   const hairColors = [
@@ -54,12 +57,12 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
     { id: 'dark-brown', color: '#8B4513', name: 'Dark Brown' },
     { id: 'brown', color: '#A0522D', name: 'Brown' },
     { id: 'light-brown', color: '#CD853F', name: 'Light Brown' },
-    { id: 'blonde', color: '#DAA520', name: 'Blonde' },
+    { id: 'blonde', color: '#e7c778ff', name: 'Blonde' },
     { id: 'red', color: '#B22222', name: 'Red' },
     { id: 'auburn', color: '#A52A2A', name: 'Auburn' },
     { id: 'gray', color: '#808080', name: 'Gray/Silver' },
     { id: 'white', color: '#F5F5F5', name: 'White' },
-    { id: 'rainbow', color: 'linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1)', name: 'Rainbow' }
+    { id: 'rainbow', color: 'linear-gradient(45deg, #e96161ff, #ead669ff, #53c0d8ff)', name: 'Rainbow' }
   ];
 
   const culturalBackgrounds = [
