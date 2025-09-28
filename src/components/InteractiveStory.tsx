@@ -130,8 +130,20 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
 
   // story nodes based on character
   const generateStoryNodes = (): Record<string, StoryNode> => {
+    // Debug logging to check character name
+    console.log('Character data in story generation:', character);
+    
+    // Ensure we have a valid name, fallback to "You" if needed
+    const characterName = character.name?.trim() || 'You';
+    
+    // Handle grammar for "You" vs other names
+    const verb = characterName === 'You' ? 'stepped' : 'stepped';
+    const possessive = characterName === 'You' ? 'your' : `${characterName}'s`;
+    const pronoun = characterName === 'You' ? 'you' : 'they';
+    const pronounCap = characterName === 'You' ? 'You' : 'They';
+    
     const accessibilityText = character.accessibility.length > 0 
-      ? ` ${character.name} moved confidently ${character.accessibility.includes('wheelchair') ? 'in their wheelchair' : 
+      ? ` ${characterName} moved confidently ${character.accessibility.includes('wheelchair') ? 'in their wheelchair' : 
           character.accessibility.includes('cane') ? 'with their helpful cane' : 
           character.accessibility.includes('service-dog') ? 'alongside their loyal service dog' : ''}` 
       : '';
@@ -143,7 +155,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
     return {
       start: {
         id: 'start',
-        text: `${character.name} stepped into the enchanted forest, where sunbeams danced through emerald leaves.${accessibilityText} The air shimmered with magic, and whispered voices seemed to call from deeper within the woods. ${personalityBonus}, ${character.name} noticed three different paths ahead.`,
+        text: `${characterName} ${verb} into the enchanted forest, where sunbeams danced through emerald leaves.${accessibilityText} The air shimmered with magic, and whispered voices seemed to call from deeper within the woods. ${personalityBonus}, ${characterName} noticed three different paths ahead.`,
         illustration: enchantedForest,
         choices: [
           { id: 'crystal_path', text: 'Follow the sparkling crystal path', nextNodeId: 'crystal_cave' },
@@ -153,7 +165,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       },
       crystal_cave: {
         id: 'crystal_cave',
-        text: `The crystal path led ${character.name} to a magnificent cave filled with glowing gems. Each crystal hummed with a different musical note. An ancient dragon sat among the crystals, looking sad. "I've lost my voice," the dragon explained. "Without it, I cannot sing the crystals to life and bring joy to the forest."`,
+        text: `The crystal path led ${characterName} to a magnificent cave filled with glowing gems. Each crystal hummed with a different musical note. An ancient dragon sat among the crystals, looking sad. "I've lost my voice," the dragon explained. "Without it, I cannot sing the crystals to life and bring joy to the forest."`,
         illustration: crystalCave,
         choices: [
           { id: 'sing_for_dragon', text: 'Offer to sing for the dragon', nextNodeId: 'harmony_ending' },
@@ -168,7 +180,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       },
       singing_grove: {
         id: 'singing_grove',
-        text: `${character.name} discovered a grove where the trees themselves were singing a haunting melody. In the center, a unicorn stood trapped in a cage of thorny vines. The vines seemed to respond to the music, tightening when the song was sad and loosening when it was joyful. The unicorn looked at ${character.name} with hopeful eyes.`,
+        text: `${characterName} discovered a grove where the trees themselves were singing a haunting melody. In the center, a unicorn stood trapped in a cage of thorny vines. The vines seemed to respond to the music, tightening when the song was sad and loosening when it was joyful. The unicorn looked at ${characterName} with hopeful eyes.`,
         illustration: unicornInForestImg,
         choices: [
           { id: 'change_song', text: 'Try to change the trees\' song to be happier', nextNodeId: 'musical_ending' },

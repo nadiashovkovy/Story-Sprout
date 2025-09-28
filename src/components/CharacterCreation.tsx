@@ -119,7 +119,7 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
     if (character.skinTone && character.hairStyle && character.hairColor) {
       const finalCharacter = {
         ...character,
-        name: character.name.trim() || 'User' // Default to 'User' if name is empty
+        name: character.name.trim() || 'You' // Default to 'You' if name is empty
       };
       onCharacterComplete(finalCharacter);
       onNavigate('story');
