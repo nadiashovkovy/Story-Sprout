@@ -209,9 +209,9 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           </div>
           
           {/* Slideshow Container */}
-          <div className="relative">
+          <div className="relative overflow-hidden">
             {/* Slides Container */}
-            <div className="rounded-2xl">
+            <div className="rounded-2xl overflow-hidden">
               <div 
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{ transform: `translateX(-${currentSlide * 100}%)` }}
