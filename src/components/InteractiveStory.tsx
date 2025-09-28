@@ -6,7 +6,8 @@ import { Progress } from "./ui/progress";
 import { ArrowLeft, BookOpen, Volume2, Pause, Star, Trophy, RotateCcw } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { CharacterData, StoryProgress } from "../../App";
-import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
+// Conditionally import ElevenLabs only if needed
+// import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
 // story images
 import enchantedForest from "../assets/enchantedforest.png";
@@ -51,10 +52,10 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
   const [currentAudioSource, setCurrentAudioSource] = useState<AudioBufferSourceNode | null>(null);
   const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
 
-  // ElevenLabs client
-  const elevenLabsClient = new ElevenLabsClient({
-    apiKey: import.meta.env.VITE_ELEVENLABS_API_KEY,
-  });
+  // Debug logging for production
+  console.log('InteractiveStory component rendering', { character, storyProgress, currentNodeId });
+
+  // ElevenLabs client will be loaded dynamically when needed to avoid build issues
 
   // read story text aloud
   const readStoryAloud = async (text: string) => {
@@ -62,7 +63,14 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
     
     try {
       setIsPlaying(true);
-      const audio = await elevenLabsClient.textToSpeech.convert(
+      
+      // Dynamically import ElevenLabs to avoid build issues
+      const { ElevenLabsClient } = await import('@elevenlabs/elevenlabs-js');
+      const client = new ElevenLabsClient({
+        apiKey: import.meta.env.VITE_ELEVENLABS_API_KEY,
+      });
+      
+      const audio = await client.textToSpeech.convert(
         "pNInz6obpgDQGcFmaJgB", // Rachel's voice ID
         {
           text: text,
@@ -221,6 +229,23 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
 
   const storyNodes = generateStoryNodes();
   const currentNode = storyNodes[currentNodeId];
+
+  // Safety check - if currentNode is undefined, something went wrong
+  if (!currentNode) {
+    console.error('Current node not found:', currentNodeId, 'Available nodes:', Object.keys(storyNodes));
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="p-8 text-center">
+          <h2 className="text-xl font-bold text-gray-800 mb-4">Story Loading Error</h2>
+          <p className="text-gray-600 mb-4">There was an issue loading the story content.</p>
+          <Button onClick={() => onNavigate('home')}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Return Home
+          </Button>
+        </Card>
+      </div>
+    );
+  }
 
   const handleChoice = (choice: Choice) => {
     if (choice.requiresAccessibility && 
