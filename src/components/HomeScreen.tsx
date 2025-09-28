@@ -119,7 +119,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                 className="h-20"
               />
               <Badge className="bg-white text-gray-800 px-4 py-2">
-                World's First Inclusive AI Storytelling
+                Inclusive & Educational AI Storytelling
               </Badge>
               <h1 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
                 Every Child is the <span className="text-[#749fff]">Hero</span>
