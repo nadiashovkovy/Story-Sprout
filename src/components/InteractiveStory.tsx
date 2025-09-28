@@ -6,13 +6,17 @@ import { Progress } from "./ui/progress";
 import { ArrowLeft, BookOpen, Volume2, Star, Trophy, RotateCcw } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { CharacterData, StoryProgress } from "../../App";
+import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
-// Import story images
+// story images
 import enchantedForest from "../assets/enchantedforest.png";
 import unicornInForestImg from "../assets/unicorninforest.png";
 import crystalCave from "../assets/crystalcave.png";
 import dragon from "../assets/dragoninforest.png";
 import confetti from "../assets/confetti.png"
+import rainbow from "../assets/rainbowflowers.png"
+import butterfly from "../assets/butterfly.png"
+import seasprite from "../assets/seasprite.png"
 
 
 interface InteractiveStoryProps {
@@ -42,11 +46,62 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
   const [currentNodeId, setCurrentNodeId] = useState('start');
   const [choicesMade, setChoicesMade] = useState(0);
   const [_storyPath, setStoryPath] = useState<string[]>(['start']);
+  const [isPlaying, setIsPlaying] = useState(false);
 
-  // Generate story nodes based on character
+  // ElevenLabs client
+  const elevenLabsClient = new ElevenLabsClient({
+    apiKey: import.meta.env.VITE_ELEVENLABS_API_KEY,
+  });
+
+  // read story text aloud
+  const readStoryAloud = async (text: string) => {
+    if (isPlaying || !import.meta.env.VITE_ELEVENLABS_API_KEY) return;
+    
+    try {
+      setIsPlaying(true);
+      const audio = await elevenLabsClient.textToSpeech.convert(
+        "pNInz6obpgDQGcFmaJgB", // Rachel's voice ID
+        {
+          text: text,
+          modelId: "eleven_multilingual_v2"
+        }
+      );
+
+      // Convert to audio and play
+      const audioContext = new AudioContext();
+      const reader = audio.getReader();
+      const chunks = [];
+      
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+      }
+      
+      const audioData = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
+      let offset = 0;
+      for (const chunk of chunks) {
+        audioData.set(chunk, offset);
+        offset += chunk.length;
+      }
+      
+      const audioBuffer = await audioContext.decodeAudioData(audioData.buffer);
+      const source = audioContext.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(audioContext.destination);
+      source.start();
+      
+      source.onended = () => setIsPlaying(false);
+    } catch (error) {
+      console.error('Error playing audio:', error);
+      setIsPlaying(false);
+    }
+  };
+
+  // story nodes based on character
   const generateStoryNodes = (): Record<string, StoryNode> => {
     const accessibilityText = character.accessibility.length > 0 
-      ? ` ${character.name} moved confidently ${character.accessibility.includes('wheelchair') ? 'in their amazing wheelchair' : 
+      ? ` ${character.name} moved confidently ${character.accessibility.includes('wheelchair') ? 'in their wheelchair' : 
           character.accessibility.includes('cane') ? 'with their helpful cane' : 
           character.accessibility.includes('service-dog') ? 'alongside their loyal service dog' : ''}` 
       : '';
@@ -94,7 +149,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       butterfly_friend: {
         id: 'butterfly_friend',
         text: `${character.name} approached the small butterfly whose wing was caught under a fallen leaf. ${character.accessibility.includes('prosthetic') ? 'Using their prosthetic arm with extra care,' : ''} ${character.name} gently freed the butterfly. "Thank you!" the butterfly sparkled. "I'm actually a fairy! Because you helped me first, I can grant you a special wish to help with your adventure."`,
-        illustration: "https://images.unsplash.com/photo-1444927714506-8492d94b5ba0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWdpY2FsJTIwYnV0dGVyZmx5fGVufDB8fHx8MTc1ODk5ODg1MXww&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        illustration: butterfly,
         choices: [
           { id: 'wish_wisdom', text: 'Wish for wisdom to help others', nextNodeId: 'wisdom_ending' },
           { id: 'wish_communication', text: 'Wish to understand all forest creatures', nextNodeId: 'communication_ending' },
@@ -104,7 +159,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       voice_quest: {
         id: 'voice_quest',
         text: `${character.name} searched high and low and discovered that the dragon's voice was captured in a magical shell by a mischievous sea sprite. ${character.accessibility.includes('wheelchair') ? 'Racing through the forest paths,' : 'Running quickly,'} ${character.name} reached the sprite's pond. The sprite agreed to return the voice, but only if ${character.name} could solve their riddle.`,
-        illustration: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWdpY2FsJTIwcG9uZHxlbnwwfHx8fDE3NTg5OTg4NTR8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        illustration: seasprite,
         choices: [
           { id: 'solve_riddle', text: 'Accept the riddle challenge', nextNodeId: 'riddle_ending' },
           { id: 'trade_something', text: 'Offer to trade something precious', nextNodeId: 'trade_ending' },
@@ -120,7 +175,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       },
       sign_ending: {
         id: 'sign_ending',
-        text: `Drawing from their own experience, ${character.name} patiently taught the dragon sign language. The dragon was amazed to discover this beautiful way of communication. When the dragon signed to the crystals, they responded with the most incredible light show the forest had ever seen! "You've given me something even more powerful than my voice," the dragon signed back. "You've shown me a whole new way to express the magic within." ${character.name} had created a new form of crystal magic that celebrated different ways of communication.`,
+        text: dragon,
         illustration: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcnlzdGFsJTIwY2F2ZXxlbnwwfHx8fDE3NTg5OTg4NDV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
         choices: [],
         isEnding: true
@@ -128,7 +183,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       musical_ending: {
         id: 'musical_ending',
         text: `${character.name} ${character.personalityTrait === 'artistic' ? 'used their creative spirit and' : ''} began to hum a joyful tune, and amazingly, the trees responded! Their song shifted from melancholy to pure happiness. The thorny vines loosened and dissolved into flower petals. The unicorn was free! "Your heart's music changed everything," the unicorn said gratefully. "${character.name}, you have the rare gift of bringing joy and freedom wherever you go." The entire grove bloomed with rainbow flowers in celebration.`,
-        illustration: "https://images.unsplash.com/photo-1542273917363-3b1817f69a2d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtYWdpY2FsJTIwdW5pY29ybnxlbnwwfHx8fDE3NTg5OTg4NDh8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        illustration: rainbow,
         choices: [],
         isEnding: true
       },
@@ -298,8 +353,14 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
               <div className="flex items-center space-x-2 mb-6">
                 <BookOpen className="w-5 h-5 text-[#749fff]" />
                 <h2 className="text-xl font-semibold text-gray-800">The Enchanted Forest</h2>
-                <Button variant="ghost" size="sm" className="ml-auto">
-                  <Volume2 className="w-4 h-4" />
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="ml-auto" 
+                  onClick={() => readStoryAloud(currentNode.text)}
+                  disabled={isPlaying || !import.meta.env.VITE_ELEVENLABS_API_KEY}
+                >
+                  <Volume2 className={`w-4 h-4 ${isPlaying ? 'animate-pulse text-blue-500' : ''}`} />
                 </Button>
               </div>
 

@@ -2,7 +2,7 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
-import { Users, Globe, Accessibility, Trophy, ChevronRight, ChevronLeft } from "lucide-react";
+import { Users, Globe, Accessibility, Trophy, ChevronRight, ChevronLeft, LockKeyholeOpen, LockKeyhole } from "lucide-react";
 import { useState } from "react";
 
 // Import assets
@@ -259,9 +259,15 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                           <h3 className="font-bold text-gray-800 mb-2 text-2xl">{path.title}</h3>
                           <p className="text-gray-600 mb-4 text-sm leading-relaxed">{path.description}</p>
                           {path.unlocked ? (
-                            <Badge className="bg-[#cadbf1] text-[#749fff] text-md px-4 py-2">Available</Badge>
+                            <Badge className="bg-[#cadbf1] text-[#749fff] text-md px-4 py-2 flex items-center w-fit">
+                              <LockKeyholeOpen className="w-4 h-4 mr-2" />
+                              Available
+                            </Badge>
                           ) : (
-                            <Badge variant="secondary" className="text-md px-6">Locked</Badge>
+                            <Badge variant="secondary" className="text-md px-4 py-2 flex items-center w-fit">
+                              <LockKeyhole className="w-4 h-4 mr-2" />
+                              Locked
+                            </Badge>
                           )}
                         </div>
                       </div>
@@ -325,9 +331,15 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                 </div>
                 <h3 className="font-semibold text-gray-800 mb-2">{path.title}</h3>
                 {path.unlocked ? (
-                  <Badge className="bg-[#cadbf1] text-[#749fff]">Available</Badge>
+                  <Badge className="bg-[#cadbf1] text-[#749fff] flex items-center w-fit mx-auto">
+                    <LockKeyholeOpen className="w-4 h-4 mr-2" />
+                    Available
+                  </Badge>
                 ) : (
-                  <Badge variant="secondary">Locked</Badge>
+                  <Badge variant="secondary" className="flex items-center w-fit mx-auto">
+                    <LockKeyhole className="w-4 h-4 mr-2" />
+                    Locked
+                  </Badge>
                 )}
               </Card>
             ))}
