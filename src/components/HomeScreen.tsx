@@ -219,7 +219,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                 {storyPaths.map((path) => (
                   <div key={path.id} className="w-full flex-shrink-0 px-4">
                     <Card 
-                      className={`p-6 rounded-2xl transition-all cursor-pointer mx-auto relative ${
+                      className={`p-4 md:p-6 rounded-2xl transition-all cursor-pointer mx-auto relative ${
                         path.unlocked 
                           ? 'bg-[white]/80 backdrop-blur hover:scale-105 shadow-lg' 
                           : 'bg-[white]/80 backdrop-blur opacity-60'
@@ -232,9 +232,9 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                           e.stopPropagation();
                           prevSlide();
                         }}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-gray-200/80 backdrop-blur-sm rounded-full p-2 text-gray-700 hover:bg-gray-300/80 transition-all"
+                        className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 bg-gray-200/80 backdrop-blur-sm rounded-full p-2 text-gray-700 hover:bg-gray-300/80 transition-all"
                       >
-                        <ChevronLeft className="w-5 h-5" />
+                        <ChevronLeft className="w-4 h-4 md:w-5 md:h-5" />
                       </button>
                       
                       <button
@@ -242,33 +242,35 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                           e.stopPropagation();
                           nextSlide();
                         }}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-gray-200/80 backdrop-blur-sm rounded-full p-2 text-gray-700 hover:bg-gray-300/80 transition-all"
+                        className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 bg-gray-200/80 backdrop-blur-sm rounded-full p-2 text-gray-700 hover:bg-gray-300/80 transition-all"
                       >
-                        <ChevronRight className="w-5 h-5" />
+                        <ChevronRight className="w-4 h-4 md:w-5 md:h-5" />
                       </button>
 
-                      <div className="flex items-center space-x-20">
-                        <div className="flex justify-center items-center flex-shrink-0 pl-10">
+                      <div className="flex flex-col md:flex-row items-center md:space-x-8 space-y-4 md:space-y-0">
+                        <div className="flex justify-center items-center flex-shrink-0 order-1 md:order-none">
                           <img 
                             src={path.icon} 
                             alt={path.title}
-                            className="w-30 h-30 object-contain"
+                            className="w-24 h-24 md:w-30 md:h-30 object-contain"
                           />
                         </div>
-                        <div className="flex-1 text-left pr-10">
-                          <h3 className="font-bold text-gray-800 mb-2 text-2xl">{path.title}</h3>
+                        <div className="flex-1 text-center md:text-left px-2 md:px-0 order-2 md:order-none">
+                          <h3 className="font-bold text-gray-800 mb-2 text-xl md:text-2xl">{path.title}</h3>
                           <p className="text-gray-600 mb-4 text-sm leading-relaxed">{path.description}</p>
-                          {path.unlocked ? (
-                            <Badge className="bg-[#cadbf1] text-[#749fff] text-md px-4 py-2 flex items-center w-fit">
-                              <LockKeyholeOpen className="w-4 h-4 mr-2" />
-                              Available
-                            </Badge>
-                          ) : (
-                            <Badge variant="secondary" className="text-md px-4 py-2 flex items-center w-fit">
-                              <LockKeyhole className="w-4 h-4 mr-2" />
-                              Locked
-                            </Badge>
-                          )}
+                          <div className="flex justify-center md:justify-start">
+                            {path.unlocked ? (
+                              <Badge className="bg-[#cadbf1] text-[#749fff] text-md px-4 py-2 flex items-center w-fit">
+                                <LockKeyholeOpen className="w-4 h-4 mr-2" />
+                                Available
+                              </Badge>
+                            ) : (
+                              <Badge variant="secondary" className="text-md px-4 py-2 flex items-center w-fit">
+                                <LockKeyhole className="w-4 h-4 mr-2" />
+                                Locked
+                              </Badge>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </Card>
