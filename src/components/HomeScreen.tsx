@@ -104,7 +104,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           <div className="space-y-8">
             <div className="space-y-6">
               <img 
-                src="/src/assets/StorySproutLogoTransparent.png" 
+                src={logoImg}
                 alt="StorySprout" 
                 className="h-20"
               />
