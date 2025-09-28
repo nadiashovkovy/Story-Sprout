@@ -6,6 +6,7 @@ import { Progress } from "./ui/progress";
 import { ArrowLeft, BookOpen, Volume2, Pause, Star, Trophy, RotateCcw } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { CharacterData, StoryProgress } from "../../App";
+import { parseEducationalText } from "./VocabularyTooltip";
 // Conditionally import ElevenLabs only if needed
 // import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
 
@@ -17,8 +18,6 @@ import dragon from "../assets/dragoninforest.png";
 import confetti from "../assets/confetti.png"
 import rainbow from "../assets/rainbowflowers.png"
 import butterfly from "../assets/butterfly.png"
-import seasprite from "../assets/seasprite.png"
-import fairy from "../assets/fairy.png"
 
 
 interface InteractiveStoryProps {
@@ -170,9 +169,6 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
     
     const pronouns = getPronounSet(character.pronouns || 'they-them');
     
-    // Handle grammar for "You" vs other names
-    const verb = characterName === 'You' ? 'stepped' : 'stepped';
-    
     const accessibilityText = character.accessibility.length > 0 
       ? ` ${characterName} moved confidently ${character.accessibility.includes('wheelchair') ? `in ${pronouns.possessiveAdjective} wheelchair` : 
           character.accessibility.includes('cane') ? `with ${pronouns.possessiveAdjective} helpful cane` : 
@@ -186,84 +182,95 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
     return {
       start: {
         id: 'start',
-        text: `${characterName} ${verb} into the enchanted forest, where sunbeams danced through emerald leaves.${accessibilityText} The air shimmered with magic, and whispered voices seemed to call from deeper within the woods. ${personalityBonus}, ${characterName} noticed three different paths ahead.`,
+        text: `${characterName} stepped into the enchanted forest on a sunny morning. The tall trees formed a beautiful ecosystem where many different animals and plants lived together. Colorful flowers bloomed everywhere, and butterflies danced from one flower to another. Birds sang happy songs in the branches above. ${accessibilityText} The forest felt magical and welcoming. ${personalityBonus}, ${characterName} saw three different paths leading deeper into the woods. Each path looked like it would lead to a different adventure.`,
         illustration: enchantedForest,
         choices: [
-          { id: 'crystal_path', text: 'Follow the sparkling crystal path', nextNodeId: 'crystal_cave' },
-          { id: 'musical_path', text: 'Follow the path with beautiful music', nextNodeId: 'singing_grove' },
-          { id: 'helping_path', text: 'Help the crying butterfly first', nextNodeId: 'butterfly_friend' }
+          { id: 'crystal_path', text: 'Follow the sparkling crystal path toward the mountain cave', nextNodeId: 'crystal_cave' },
+          { id: 'musical_path', text: 'Follow the path with beautiful birdsong toward the grove', nextNodeId: 'singing_grove' },
+          { id: 'helping_path', text: 'Help the injured monarch butterfly first', nextNodeId: 'butterfly_friend' }
         ]
       },
       crystal_cave: {
         id: 'crystal_cave',
-        text: `The crystal path led ${characterName} to a magnificent cave filled with glowing gems. Each crystal hummed with a different musical note. An ancient dragon sat among the crystals, looking sad. "I've lost my voice," the dragon explained. "Without it, I cannot sing the crystals to life and bring joy to the forest."`,
+        text: `The crystal path led ${characterName} up a mountain to an amazing cave filled with glowing gems. The crystals were so beautiful they looked like stars twinkling in the darkness. Each crystal made different musical sounds when the wind blew through them. An old, wise dragon sat quietly among the crystals, looking very sad. "Hello, young friend," the dragon said gently. "I used to be able to make these crystals sing with my voice, but I've lost that special ability." The dragon explained that when the crystals sang, they created a resonance that helped rare cave creatures live happily. Without the dragon's voice, the luminescent crystals were slowly losing their magical glow.`,
         illustration: crystalCave,
         choices: [
-          { id: 'sing_for_dragon', text: 'Offer to sing for the dragon', nextNodeId: 'harmony_ending' },
-          { id: 'find_voice', text: 'Search for the dragon\'s lost voice', nextNodeId: 'voice_quest' },
+          { id: 'learn_crystals', text: 'Ask to learn more about how crystals and sound work together', nextNodeId: 'crystal_science' },
+          { id: 'find_voice', text: 'Offer to search for what took the dragon\'s voice', nextNodeId: 'voice_quest' },
           { 
             id: 'sign_language', 
-            text: 'Teach the dragon sign language', 
-            nextNodeId: 'sign_ending',
+            text: 'Suggest trying different ways to communicate with crystals', 
+            nextNodeId: 'communication_science',
             requiresAccessibility: ['hearing-aid', 'cochlear-implant']
           }
         ]
       },
+      crystal_science: {
+        id: 'crystal_science',
+        text: `The dragon's eyes sparkled with joy when ${characterName} wanted to learn more. "These special crystals have been growing here for thousands of years," the dragon explained proudly. "When I sing to them, they vibrate and create beautiful light that helps tiny creatures see in the dark." ${characterName} learned that small, glowing moths lived in the cave and needed the crystal light to find food. The dragon showed ${characterName} how sound waves could make the crystals dance and shine. "But now that my voice is gone, the poor little moths are having trouble finding their way around," the dragon said sadly. ${characterName} noticed that some of the crystals were already getting dimmer. The cave felt quieter and less magical than it should be.`,
+        illustration: crystalCave,
+        choices: [
+          { id: 'help_sing', text: 'Offer to try singing with the dragon to help the crystals', nextNodeId: 'harmony_ending' },
+          { id: 'find_solution', text: 'Look for another way to make the crystals glow', nextNodeId: 'crystal_solution' },
+          { id: 'protect_moths', text: 'Focus on helping the glowing moths find food', nextNodeId: 'moth_helper' }
+        ]
+      },
       singing_grove: {
         id: 'singing_grove',
-        text: `${characterName} discovered a grove where the trees themselves were singing a haunting melody. In the center, a unicorn stood trapped in a cage of thorny vines. The vines seemed to respond to the music, tightening when the song was sad and loosening when it was joyful. The unicorn looked at ${characterName} with hopeful eyes.`,
+        text: `${characterName} followed the sound of beautiful birdsong to a magical grove where the trees themselves were singing! The music was so pretty it made ${characterName} feel happy and peaceful. In the center of the grove, a white unicorn was trapped by thick, thorny vines that didn't belong in the forest. These were invasive plants that had grown too big and were hurting the other plants around them. The unicorn looked at ${characterName} with kind, hopeful eyes. The native flowers and trees in the grove were struggling because the mean vines were taking all their sunlight and water. ${characterName} could see that this beautiful place needed help to become healthy again. The birds in the trees seemed to be asking for ${characterName}'s help with their songs.`,
         illustration: unicornInForestImg,
         choices: [
-          { id: 'change_song', text: 'Try to change the trees\' song to be happier', nextNodeId: 'musical_ending' },
-          { id: 'cut_vines', text: 'Look for something to cut the vines', nextNodeId: 'tool_search' },
-          { id: 'unicorn_communication', text: 'Try to communicate with the unicorn', nextNodeId: 'telepathy_ending' }
+          { id: 'remove_vines', text: 'Try to carefully remove the harmful vines', nextNodeId: 'vine_removal' },
+          { id: 'ask_birds', text: 'Ask the singing birds for advice about helping the grove', nextNodeId: 'bird_wisdom' },
+          { id: 'comfort_unicorn', text: 'Talk to the unicorn to learn more about the problem', nextNodeId: 'unicorn_story' }
         ]
       },
-      butterfly_friend: {
-        id: 'butterfly_friend',
-        text: `${characterName} approached the small butterfly whose wing was caught under a fallen leaf. ${character.accessibility.includes('prosthetic') ? `Using ${pronouns.possessiveAdjective} prosthetic arm with extra care,` : ''} ${characterName} gently freed the butterfly. "Thank you!" the butterfly sparkled. "I'm actually a fairy! Because you helped me first, I can grant you a special wish to help with your adventure."`,
-        illustration: butterfly,
-        choices: [
-          { id: 'wish_wisdom', text: 'Wish for wisdom to help others', nextNodeId: 'wisdom_ending' },
-          { id: 'wish_communication', text: 'Wish to understand all forest creatures', nextNodeId: 'communication_ending' },
-          { id: 'wish_healing', text: 'Wish for the power to heal', nextNodeId: 'healing_ending' }
-        ]
-      },
-      voice_quest: {
-        id: 'voice_quest',
-        text: `${characterName} searched high and low and discovered that the dragon's voice was captured in a magical shell by a mischievous sea sprite. ${character.accessibility.includes('wheelchair') ? 'Racing through the forest paths,' : 'Running quickly,'} ${characterName} reached the sprite's pond. The sprite agreed to return the voice, but only if ${characterName} could solve ${pronouns.possessiveAdjective} riddle.`,
-        illustration: seasprite,
-        choices: [
-          { id: 'solve_riddle', text: 'Accept the riddle challenge', nextNodeId: 'riddle_ending' },
-          { id: 'trade_something', text: 'Offer to trade something precious', nextNodeId: 'trade_ending' },
-          { id: 'challenge_game', text: 'Challenge the sprite to a game', nextNodeId: 'game_ending' }
-        ]
-      },
-      harmony_ending: {
-        id: 'harmony_ending',
-        text: `${characterName} began to sing, and ${pronouns.possessiveAdjective} voice harmonized perfectly with the crystal resonance. The dragon's eyes filled with tears of joy as the crystals began to glow brighter than ever before. "Your voice has given me something even better than my own," the dragon said. "You've shown me that different voices can create the most beautiful harmony." The forest filled with magical light, and all the creatures celebrated ${characterName}'s gift of bringing harmony to the world.`,
-        illustration: dragon, 
-        choices: [],
-        isEnding: true
-      },
-      sign_ending: {
-        id: 'sign_ending',
-        text: `Drawing from ${pronouns.possessiveAdjective} own experience, ${characterName} patiently taught the dragon sign language. The dragon was amazed to discover this beautiful way of communication. When the dragon signed to the crystals, they responded with the most incredible light show the forest had ever seen! "You've given me something even more powerful than my voice," the dragon signed back. "You've shown me a whole new way to express the magic within." ${characterName} had created a new form of crystal magic that celebrated different ways of communication.`,
-        illustration: dragon, 
-        choices: [],
-        isEnding: true
-      },
-      musical_ending: {
-        id: 'musical_ending',
-        text: `${characterName} ${character.personalityTrait === 'artistic' ? `used ${pronouns.possessiveAdjective} creative spirit and` : ''} began to hum a joyful tune, and amazingly, the trees responded! Their song shifted from melancholy to pure happiness. The thorny vines loosened and dissolved into flower petals. The unicorn was free! "Your heart's music changed everything," the unicorn said gratefully. "${characterName}, you have the rare gift of bringing joy and freedom wherever you go." The entire grove bloomed with rainbow flowers in celebration.`,
+      vine_removal: {
+        id: 'vine_removal',
+        text: `${characterName} carefully started pulling away the thorny vines, being extra gentle so no one would get hurt. It was hard work, but ${characterName} discovered that teamwork made it easier. Some friendly squirrels came down from the trees to help move the smaller pieces. The birds sang encouraging songs while everyone worked together. As the vines came away, beautiful native wildflowers began to poke their heads up toward the sunlight again. The unicorn's eyes grew brighter as more space opened up around ${pronouns.object}. "Thank you for understanding that some plants don't belong here," the unicorn said gratefully. Soon, the grove looked much healthier, and all the forest animals seemed happier too.`,
         illustration: rainbow,
         choices: [],
         isEnding: true
       },
-      wisdom_ending: {
-        id: 'wisdom_ending',
-        text: `The fairy granted ${characterName} the gift of wisdom. Suddenly, ${characterName} could understand the needs of every creature in the forest. ${pronouns.subject.charAt(0).toUpperCase() + pronouns.subject.slice(1)} helped the lost baby deer find their family, taught the young trees how to grow strong, and showed the stream how to sing more beautifully. Word of ${characterName}'s wisdom spread throughout all the magical realms. ${characterName} became known as the Forest's Greatest Helper, and creatures from far and wide came to learn from ${pronouns.possessiveAdjective} kindness and insight.`,
-        illustration: fairy,
+      butterfly_friend: {
+        id: 'butterfly_friend',
+        text: `${characterName} gently knelt down next to a beautiful orange and black butterfly whose wing was stuck under a fallen leaf. The butterfly looked just like the monarch butterflies that make amazing journeys across the country! ${character.accessibility.includes('prosthetic') ? `Using ${pronouns.possessiveAdjective} prosthetic arm very carefully,` : ''} ${characterName} lifted the leaf and freed the butterfly's delicate wing. Suddenly, the butterfly began to glow with magical light! "Thank you for your kindness," the butterfly said in a tiny, sweet voice. "I'm actually a fairy who protects all the butterflies and bees in this forest!" The fairy explained that real monarch butterflies travel thousands of miles during their migration to find warm places to live. She told ${characterName} that these amazing butterflies are very important pollinators who help flowers make seeds.`,
+        illustration: butterfly,
+        choices: [
+          { id: 'learn_migration', text: 'Ask to learn more about butterfly migration', nextNodeId: 'migration_lesson' },
+          { id: 'help_pollinators', text: 'Offer to help protect the butterflies and bees', nextNodeId: 'pollinator_garden' },
+          { id: 'make_wish', text: 'Ask the fairy for help with the forest', nextNodeId: 'fairy_wish' }
+        ]
+      },
+      migration_lesson: {
+        id: 'migration_lesson',
+        text: `The butterfly fairy's wings sparkled as she shared an amazing story about migration. "Every fall, monarch butterflies fly all the way from Canada to Mexico - that's farther than driving across the whole country!" she explained excitedly. ${characterName} learned that these incredible butterflies use the sun and special magnetic feelings to find their way, just like having a natural compass. The fairy showed ${characterName} a map in the clouds of the long journey the butterflies take. "The most amazing part is that the butterflies making this trip have never been there before - their great-great-grandparents made the trip!" the fairy said with wonder. She explained that butterflies need safe places to rest and eat along the way, just like people need rest stops on long car trips. ${characterName} felt amazed thinking about these tiny creatures making such a big adventure. The fairy smiled, seeing how much ${characterName} cared about helping the butterflies.`,
+        illustration: butterfly,
+        choices: [
+          { id: 'create_rest_stops', text: 'Help create safe rest stops for traveling butterflies', nextNodeId: 'migration_ending' },
+          { id: 'spread_word', text: 'Promise to tell others about protecting butterfly paths', nextNodeId: 'conservation_ending' },
+          { id: 'plant_flowers', text: 'Plant special flowers that butterflies love', nextNodeId: 'garden_ending' }
+        ]
+      },
+      // Simplified endings
+      harmony_ending: {
+        id: 'harmony_ending',
+        text: `${characterName} took a deep breath and began to sing along with the dragon. Their voices blended together beautifully, creating the perfect sound to wake up the crystals! The cave filled with the most amazing light show as all the crystals began to glow and dance. The tiny moths fluttered happily around the bright crystals, finally able to see clearly again. "Your voice is the missing piece I needed," the dragon said with tears of joy. "Together, we've brought the magic back to our cave home!" The dragon and ${characterName} became the best of friends, and the crystal cave became the most beautiful and safe home for all the creatures who lived there. ${characterName} had learned that sometimes the best solutions come from working together and helping others.`,
+        illustration: dragon,
+        choices: [],
+        isEnding: true
+      },
+      migration_ending: {
+        id: 'migration_ending',
+        text: `${characterName} and the butterfly fairy worked together to plant beautiful flowers all along the forest paths where butterflies liked to travel. They made cozy resting spots with shallow water dishes and sheltered areas where tired butterflies could sleep safely. Soon, the forest became known as the most wonderful place for traveling butterflies to stop and rest. Monarchs, swallowtails, and many other butterflies visited throughout the year, making the forest more colorful and lively than ever before. "You've created something truly special," the fairy said proudly. "${characterName}, you've helped make sure these amazing travelers will have a safe journey for many years to come!" The forest buzzed with happy butterflies, and ${characterName} felt proud of making such a difference for these incredible creatures.`,
+        illustration: rainbow,
+        choices: [],
+        isEnding: true
+      },
+      conservation_ending: {
+        id: 'conservation_ending',
+        text: `${characterName} promised the fairy to become a butterfly protector and share what ${pronouns.subject} had learned with everyone back home. The fairy gave ${characterName} a special badge that sparkled like butterfly wings to show ${pronouns.subject} was now an official "Butterfly Guardian." ${characterName} learned that conservation means taking care of nature so that amazing animals like monarch butterflies can keep living and thriving. The fairy taught ${characterName} simple ways to help, like planting native flowers and avoiding harmful chemicals in gardens. "Every person who cares makes a difference," the fairy said warmly. "And now you'll help others care too!" ${characterName} left the forest feeling excited to share the butterfly story and help create more safe places for these wonderful creatures. The adventure had turned ${characterName} into a real nature hero!`,
+        illustration: butterfly,
         choices: [],
         isEnding: true
       }
@@ -468,7 +475,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
               </div>
 
               <div className="prose prose-lg text-gray-700 leading-relaxed mb-8">
-                {currentNode.text}
+                {parseEducationalText(currentNode.text, character.voiceId)}
               </div>
 
               {/* Choices */}

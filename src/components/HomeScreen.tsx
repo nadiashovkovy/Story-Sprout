@@ -48,21 +48,21 @@ export function HomeScreen({ onNavigate, storyProgress, character }: HomeScreenP
       title: 'Ocean Depths', 
       icon: oceanImg, 
       description: 'Dive beneath the waves to explore underwater kingdoms and coral cities. Meet mermaids, dolphins, and sea creatures on an aquatic adventure.',
-      unlocked: storyProgress.storiesCompleted >= 3 
+      unlocked: storyProgress.storiesCompleted >= 1 
     },
     { 
       id: 'space-journey', 
       title: 'Space Journey', 
       icon: rocketImg, 
       description: 'Blast off to distant planets and explore alien worlds among the stars. Navigate asteroid fields and make contact with friendly extraterrestrial beings.',
-      unlocked: storyProgress.storiesCompleted >= 6 
+      unlocked: storyProgress.storiesCompleted >= 2 
     },
     { 
       id: 'pirate-adventure', 
       title: 'Pirate Voyage', 
       icon: treasureImg, 
       description: 'Set sail on the high seas in search of legendary buried treasure. Navigate dangerous waters and outwit rival pirates on your quest for gold.',
-      unlocked: storyProgress.storiesCompleted >= 9 
+      unlocked: storyProgress.storiesCompleted >= 3 
     }
   ];
 
@@ -125,7 +125,7 @@ export function HomeScreen({ onNavigate, storyProgress, character }: HomeScreenP
                 Every Child is the <span className="text-[#749fff]">Hero</span>
               </h1>
               <p className="text-xl text-white/90 leading-relaxed max-w-2xl">
-                The world's first inclusive, adaptive AI storytelling app that makes every child the hero — 
+                The world's first inclusive, adaptive AI storytelling site that makes every child the hero — 
                 reflecting their unique identity, abilities, and imagination.
               </p>
             </div>
