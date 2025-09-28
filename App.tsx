@@ -61,8 +61,8 @@ export default function App() {
   };
 
   const handleStoryComplete = (
-    storyId: string,
-    choicesMade: number,
+    _storyId: string,
+    _choicesMade: number,
   ) => {
     setStoryProgress((prev) => ({
       ...prev,

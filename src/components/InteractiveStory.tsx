@@ -33,7 +33,7 @@ interface Choice {
 export function InteractiveStory({ onNavigate, character, storyProgress, onStoryComplete }: InteractiveStoryProps) {
   const [currentNodeId, setCurrentNodeId] = useState('start');
   const [choicesMade, setChoicesMade] = useState(0);
-  const [storyPath, setStoryPath] = useState<string[]>(['start']);
+  const [_storyPath, setStoryPath] = useState<string[]>(['start']);
 
   // Generate story nodes based on character
   const generateStoryNodes = (): Record<string, StoryNode> => {
@@ -61,7 +61,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       crystal_cave: {
         id: 'crystal_cave',
         text: `The crystal path led ${character.name} to a magnificent cave filled with glowing gems. Each crystal hummed with a different musical note. An ancient dragon sat among the crystals, looking sad. "I've lost my voice," the dragon explained. "Without it, I cannot sing the crystals to life and bring joy to the forest."`,
-        illustration: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcnlzdGFsJTIwY2F2ZXxlbnwwfHx8fDE3NTg5OTg4NDV8MA&ixlib=rb-4.1.0&q=80&w=1080&utm_source=figma&utm_medium=referral",
+        illustration: "https://cdn.openart.ai/uploads/image_5SgQNeFF_1759017934164_raw.jpg",
         choices: [
           { id: 'sing_for_dragon', text: 'Offer to sing for the dragon', nextNodeId: 'harmony_ending' },
           { id: 'find_voice', text: 'Search for the dragon\'s lost voice', nextNodeId: 'voice_quest' },
