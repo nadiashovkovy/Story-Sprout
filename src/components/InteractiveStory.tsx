@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
-import { ArrowLeft, BookOpen, Volume2, Star, Trophy, RotateCcw } from "lucide-react";
+import { ArrowLeft, BookOpen, Volume2, Pause, Star, Trophy, RotateCcw } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { CharacterData, StoryProgress } from "../../App";
 import { ElevenLabsClient } from '@elevenlabs/elevenlabs-js';
@@ -47,6 +47,8 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
   const [choicesMade, setChoicesMade] = useState(0);
   const [_storyPath, setStoryPath] = useState<string[]>(['start']);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentAudioSource, setCurrentAudioSource] = useState<AudioBufferSourceNode | null>(null);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
 
   // ElevenLabs client
   const elevenLabsClient = new ElevenLabsClient({
@@ -68,7 +70,8 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       );
 
       // Convert to audio and play
-      const audioContext = new AudioContext();
+      const context = new AudioContext();
+      setAudioContext(context);
       const reader = audio.getReader();
       const chunks = [];
       
@@ -85,16 +88,34 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
         offset += chunk.length;
       }
       
-      const audioBuffer = await audioContext.decodeAudioData(audioData.buffer);
-      const source = audioContext.createBufferSource();
+      const audioBuffer = await context.decodeAudioData(audioData.buffer);
+      const source = context.createBufferSource();
       source.buffer = audioBuffer;
-      source.connect(audioContext.destination);
+      source.connect(context.destination);
       source.start();
       
-      source.onended = () => setIsPlaying(false);
+      setCurrentAudioSource(source);
+      
+      source.onended = () => {
+        setIsPlaying(false);
+        setCurrentAudioSource(null);
+        setAudioContext(null);
+      };
     } catch (error) {
       console.error('Error playing audio:', error);
       setIsPlaying(false);
+      setCurrentAudioSource(null);
+      setAudioContext(null);
+    }
+  };
+
+  // pause/stop audio
+  const pauseAudio = () => {
+    if (currentAudioSource && audioContext) {
+      currentAudioSource.stop();
+      setIsPlaying(false);
+      setCurrentAudioSource(null);
+      setAudioContext(null);
     }
   };
 
@@ -353,15 +374,28 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
               <div className="flex items-center space-x-2 mb-6">
                 <BookOpen className="w-5 h-5 text-[#749fff]" />
                 <h2 className="text-xl font-semibold text-gray-800">The Enchanted Forest</h2>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="ml-auto" 
-                  onClick={() => readStoryAloud(currentNode.text)}
-                  disabled={isPlaying || !import.meta.env.VITE_ELEVENLABS_API_KEY}
-                >
-                  <Volume2 className={`w-4 h-4 ${isPlaying ? 'animate-pulse text-blue-500' : ''}`} />
-                </Button>
+                <div className="ml-auto flex space-x-1">
+                  {!isPlaying ? (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => readStoryAloud(currentNode.text)}
+                      disabled={!import.meta.env.VITE_ELEVENLABS_API_KEY}
+                      title="Play story audio"
+                    >
+                      <Volume2 className="w-4 h-4" />
+                    </Button>
+                  ) : (
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={pauseAudio}
+                      title="Pause audio"
+                    >
+                      <Pause className="w-4 h-4 text-blue-500 animate-pulse" />
+                    </Button>
+                  )}
+                </div>
               </div>
 
               <div className="prose prose-lg text-gray-700 leading-relaxed mb-8">
@@ -372,8 +406,8 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
               {currentNode.choices.length > 0 ? (
                 <div className="space-y-4">
                   <h3 className="font-semibold text-gray-800 flex items-center">
-                    <Star className="w-4 h-4 mr-2 text-[#ffd6a5]" />
-                    What will {character.name} do?
+                    <Star className="w-4 h-4 mr-2 text-[#749fff]" />
+                    What will you do?
                   </h3>
                   <div className="space-y-3">
                     {currentNode.choices.map((choice) => {
