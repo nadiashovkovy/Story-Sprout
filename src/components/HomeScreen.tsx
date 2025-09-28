@@ -40,28 +40,28 @@ export function HomeScreen({ onNavigate, storyProgress, character }: HomeScreenP
       id: 'forest-adventure', 
       title: 'Enchanted Forest', 
       icon: forestImg, 
-      description: 'Journey through magical woodlands filled with talking animals and mysterious creatures. Discover ancient secrets hidden within the heart of an enchanted realm.',
+      description: 'Explore forest ecosystems and learn about biodiversity, endangered species, and conservation. Discover how plants and animals work together in nature while making choices that protect wildlife habitats.',
       unlocked: true 
     },
     { 
       id: 'ocean-depths', 
       title: 'Ocean Depths', 
       icon: oceanImg, 
-      description: 'Dive beneath the waves to explore underwater kingdoms and coral cities. Meet mermaids, dolphins, and sea creatures on an aquatic adventure.',
+      description: 'Dive into marine biology and discover ocean conservation. Learn about coral reef ecosystems, sea creature adaptations, and how pollution affects underwater life while exploring magical underwater kingdoms.',
       unlocked: storyProgress.storiesCompleted >= 1 
     },
     { 
       id: 'space-journey', 
       title: 'Space Journey', 
       icon: rocketImg, 
-      description: 'Blast off to distant planets and explore alien worlds among the stars. Navigate asteroid fields and make contact with friendly extraterrestrial beings.',
+      description: 'Blast off to learn about astronomy, planets, and space exploration. Understand gravity, solar systems, and the science of space travel while meeting alien civilizations and navigating cosmic adventures.',
       unlocked: storyProgress.storiesCompleted >= 2 
     },
     { 
       id: 'pirate-adventure', 
       title: 'Pirate Voyage', 
       icon: treasureImg, 
-      description: 'Set sail on the high seas in search of legendary buried treasure. Navigate dangerous waters and outwit rival pirates on your quest for gold.',
+      description: 'Set sail through maritime history and ocean geography. Learn about navigation, weather patterns, and historical trade routes while searching for treasure and exploring different cultures across the seven seas.',
       unlocked: storyProgress.storiesCompleted >= 3 
     }
   ];

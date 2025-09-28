@@ -111,12 +111,14 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
   ];
 
   const voiceOptions = [
-    { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam - Deep & Calm', description: 'American, middle-aged' },
-    { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella - Sweet & Gentle', description: 'American, young adult' },
-    { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni - Warm & Friendly', description: 'American, young adult' },
-    { id: 'VR6AewLTigWG4xSOukaG', name: 'Arnold - Strong & Clear', description: 'American, middle-aged' },
-    { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi - Bright & Cheerful', description: 'American, young' },
-    { id: 'CYw3kZ02Hs0563khs1Fj', name: 'Dave - Casual & Cool', description: 'British, young adult' }
+    { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam - Deep & Calm', description: 'American English' },
+    { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella - Sweet & Gentle', description: 'American English' },
+    { id: 'CYw3kZ02Hs0563khs1Fj', name: 'James - British Charm', description: 'British English' },
+    { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni - Warm & Friendly', description: 'Polish-American accent' },
+    { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi - Bright & Cheerful', description: 'Hispanic-American accent' },
+    { id: 'VR6AewLTigWG4xSOukaG', name: 'Arnold - Strong & Clear', description: 'Austrian-German accent' },
+    { id: '21m00Tcm4TlvDq8ikWAM', name: 'Rachel - Storyteller', description: 'African-American English' },
+    { id: 'N2lVS1w4EtoT3dr4eOWO', name: 'Callum - Adventure Guide', description: 'Scottish English' }
   ];
 
   const handleAccessibilityChange = (accessibilityId: string, checked: boolean) => {
