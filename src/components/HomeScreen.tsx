@@ -306,12 +306,12 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { id: 'fantasy', title: 'Fantasy', icon: castleImg, unlocked: true },
-              { id: 'sci-fi', title: 'Sci-Fi', icon: ufoImg, unlocked: true },
-              { id: 'mystery', title: 'Mystery', icon: magnifyImg, unlocked: true },
-              { id: 'comedy', title: 'Comedy', icon: comedyImg, unlocked: true },
-              { id: 'action', title: 'Action', icon: actionImg, unlocked: true },
-              { id: 'slice-of-life', title: 'Slice of Life', icon: sliceImg, unlocked: true },
-              { id: 'random', title: 'Random', icon: questionImg, unlocked: true }
+              { id: 'sci-fi', title: 'Sci-Fi', icon: ufoImg, unlocked: storyProgress.storiesCompleted >= 2  },
+              { id: 'mystery', title: 'Mystery', icon: magnifyImg, unlocked: storyProgress.storiesCompleted >= 3  },
+              { id: 'comedy', title: 'Comedy', icon: comedyImg, unlocked: storyProgress.storiesCompleted >= 4  },
+              { id: 'action', title: 'Action', icon: actionImg, unlocked: storyProgress.storiesCompleted >= 5  },
+              { id: 'slice-of-life', title: 'Slice of Life', icon: sliceImg, unlocked: storyProgress.storiesCompleted >= 6  },
+              { id: 'random', title: 'Random', icon: questionImg, unlocked: storyProgress.storiesCompleted >= 7  }
             ].map((path) => (
               <Card 
                 key={path.id}
