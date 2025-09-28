@@ -5,6 +5,22 @@ import { Progress } from "./ui/progress";
 import { Users, Globe, Accessibility, Trophy, ChevronRight, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 
+// Import assets
+import forestImg from "../assets/forest.png";
+import oceanImg from "../assets/ocean.png";
+import rocketImg from "../assets/rocket.png";
+import treasureImg from "../assets/treasure.png";
+import logoWideImg from "../assets/StorySproutWideTransparent.png";
+import logoImg from "../assets/StorySproutLogoTransparent.png";
+import logoMainImg from "../assets/StorySproutTransparent.png";
+import castleImg from "../assets/castle.png";
+import ufoImg from "../assets/ufo.png";
+import magnifyImg from "../assets/magnify.png";
+import comedyImg from "../assets/comedy.png";
+import actionImg from "../assets/action.png";
+import sliceImg from "../assets/slice.png";
+import questionImg from "../assets/question.png";
+
 interface HomeScreenProps {
   onNavigate: (screen: "home" | "character" | "story") => void;
   storyProgress: {
@@ -23,28 +39,28 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
     { 
       id: 'forest-adventure', 
       title: 'Enchanted Forest', 
-      icon: '/src/assets/forest.png', 
+      icon: forestImg, 
       description: 'Journey through magical woodlands filled with talking animals and mysterious creatures. Discover ancient secrets hidden within the heart of an enchanted realm.',
       unlocked: true 
     },
     { 
       id: 'ocean-depths', 
       title: 'Ocean Depths', 
-      icon: '/src/assets/ocean.png', 
+      icon: oceanImg, 
       description: 'Dive beneath the waves to explore underwater kingdoms and coral cities. Meet mermaids, dolphins, and sea creatures on an aquatic adventure.',
       unlocked: storyProgress.storiesCompleted >= 3 
     },
     { 
       id: 'space-journey', 
       title: 'Space Journey', 
-      icon: '/src/assets/rocket.png', 
+      icon: rocketImg, 
       description: 'Blast off to distant planets and explore alien worlds among the stars. Navigate asteroid fields and make contact with friendly extraterrestrial beings.',
       unlocked: storyProgress.storiesCompleted >= 6 
     },
     { 
       id: 'pirate-adventure', 
       title: 'Pirate Voyage', 
-      icon: '/src/assets/treasure.png', 
+      icon: treasureImg, 
       description: 'Set sail on the high seas in search of legendary buried treasure. Navigate dangerous waters and outwit rival pirates on your quest for gold.',
       unlocked: storyProgress.storiesCompleted >= 9 
     }
@@ -66,7 +82,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <img 
-                src="/src/assets/StorySproutWideTransparent.png" 
+                src={logoWideImg} 
                 alt="StorySprout" 
                 className="h-8"
               />
@@ -93,7 +109,7 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
                 className="h-20"
               />
               <img 
-                src="/src/assets/StorySproutTransparent.png" 
+                src={logoMainImg} 
                 alt="StorySprout" 
                 className="h-20"
               />
@@ -278,13 +294,13 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { id: 'fantasy', title: 'Fantasy', icon: '/src/assets/castle.png', unlocked: true },
-              { id: 'sci-fi', title: 'Sci-Fi', icon: '/src/assets/ufo.png', unlocked: true },
-              { id: 'mystery', title: 'Mystery', icon: '/src/assets/magnify.png', unlocked: true },
-              { id: 'comedy', title: 'Comedy', icon: '/src/assets/comedy.png', unlocked: true },
-              { id: 'action', title: 'Action', icon: '/src/assets/action.png', unlocked: true },
-              { id: 'slice-of-life', title: 'Slice of Life', icon: '/src/assets/slice.png', unlocked: true },
-              { id: 'random', title: 'Random', icon: '/src/assets/question.png', unlocked: true }
+              { id: 'fantasy', title: 'Fantasy', icon: castleImg, unlocked: true },
+              { id: 'sci-fi', title: 'Sci-Fi', icon: ufoImg, unlocked: true },
+              { id: 'mystery', title: 'Mystery', icon: magnifyImg, unlocked: true },
+              { id: 'comedy', title: 'Comedy', icon: comedyImg, unlocked: true },
+              { id: 'action', title: 'Action', icon: actionImg, unlocked: true },
+              { id: 'slice-of-life', title: 'Slice of Life', icon: sliceImg, unlocked: true },
+              { id: 'random', title: 'Random', icon: questionImg, unlocked: true }
             ].map((path) => (
               <Card 
                 key={path.id}
@@ -320,13 +336,13 @@ export function HomeScreen({ onNavigate, storyProgress }: HomeScreenProps) {
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-4">
               <img 
-                src="/src/assets/StorySproutLogoTransparent.png" 
+                src={logoImg} 
                 alt="StorySprout" 
                 className="h-8"
               />
             </div>
             <p className="text-white/70 text-sm">
-              Celebrating every child's unique story, one adventure at a time.
+              Celebrating every child's unique story, one educational adventure at a time.
             </p>
           </div>
         </div>
