@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Checkbox } from "./ui/checkbox";
-import { ArrowLeft, Check, Users, Globe, Heart } from "lucide-react";
+import { ArrowLeft, Check, Users, Globe, Heart, Volume2 } from "lucide-react";
 import { CharacterData } from "../../App";
 
 interface CharacterCreationProps {
@@ -22,7 +22,8 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
       hairColor: '',
       culturalBackground: '',
       accessibility: [],
-      personalityTrait: ''
+      personalityTrait: '',
+      voiceId: ''
     }
   );
 
@@ -109,6 +110,15 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
     { id: 'determined', name: 'Determined & Strong' }
   ];
 
+  const voiceOptions = [
+    { id: 'pNInz6obpgDQGcFmaJgB', name: 'Adam - Deep & Calm', description: 'American, middle-aged' },
+    { id: 'EXAVITQu4vr4xnSDxMaL', name: 'Bella - Sweet & Gentle', description: 'American, young adult' },
+    { id: 'ErXwobaYiN019PkySvjV', name: 'Antoni - Warm & Friendly', description: 'American, young adult' },
+    { id: 'VR6AewLTigWG4xSOukaG', name: 'Arnold - Strong & Clear', description: 'American, middle-aged' },
+    { id: 'AZnzlk1XvdvUeBnXmlld', name: 'Domi - Bright & Cheerful', description: 'American, young' },
+    { id: 'CYw3kZ02Hs0563khs1Fj', name: 'Dave - Casual & Cool', description: 'British, young adult' }
+  ];
+
   const handleAccessibilityChange = (accessibilityId: string, checked: boolean) => {
     setCharacter(prev => ({
       ...prev,
@@ -116,6 +126,50 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
         ? [...prev.accessibility, accessibilityId]
         : prev.accessibility.filter(id => id !== accessibilityId)
     }));
+  };
+
+  const handleVoicePreview = async (voiceId: string) => {
+    try {
+      const { ElevenLabsClient } = await import('@elevenlabs/elevenlabs-js');
+      const client = new ElevenLabsClient({
+        apiKey: import.meta.env.VITE_ELEVENLABS_API_KEY,
+      });
+
+      const audio = await client.textToSpeech.convert(
+        voiceId,
+        {
+          text: "Hello! This is how I sound when reading your stories.",
+          modelId: "eleven_turbo_v2"
+        }
+      );
+
+      // Convert to audio and play
+      const context = new AudioContext();
+      const reader = audio.getReader();
+      const chunks = [];
+      
+      let done = false;
+      while (!done) {
+        const { value, done: streamDone } = await reader.read();
+        done = streamDone;
+        if (value) chunks.push(value);
+      }
+
+      const audioData = new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0));
+      let offset = 0;
+      for (const chunk of chunks) {
+        audioData.set(chunk, offset);
+        offset += chunk.length;
+      }
+
+      const audioBuffer = await context.decodeAudioData(audioData.buffer);
+      const source = context.createBufferSource();
+      source.buffer = audioBuffer;
+      source.connect(context.destination);
+      source.start();
+    } catch (error) {
+      console.error('Voice preview error:', error);
+    }
   };
 
   const handleNext = () => {
@@ -211,6 +265,51 @@ export function CharacterCreation({ onNavigate, onCharacterComplete, existingCha
                     ))}
                   </div>
                 </div>
+              </div>
+            </Card>
+
+            {/* Voice Selection */}
+            <Card className="bg-[#ede6db]/90 backdrop-blur rounded-2xl p-6 border-0">
+              <div className="flex items-center space-x-2 mb-4">
+                <Volume2 className="w-5 h-5 text-[#749fff]" />
+                <h3 className="text-lg font-semibold text-gray-800">Story Voice</h3>
+                <Badge variant="secondary" className="text-xs">Optional</Badge>
+              </div>
+              
+              <div className="space-y-3">
+                {voiceOptions.map((voice) => (
+                  <div key={voice.id} className="flex items-center justify-between">
+                    <button
+                      onClick={() => setCharacter({ ...character, voiceId: voice.id })}
+                      className={`flex-1 text-left p-3 rounded-lg border-2 transition-all ${
+                        character.voiceId === voice.id
+                          ? 'border-[#cadbf1] bg-[#cadbf1]/20'
+                          : 'border-gray-200 bg-white hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium text-gray-800">{voice.name}</p>
+                          <p className="text-xs text-gray-600">{voice.description}</p>
+                        </div>
+                        {import.meta.env.VITE_ELEVENLABS_API_KEY && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleVoicePreview(voice.id);
+                            }}
+                            className="text-[#749fff] hover:bg-[#749fff]/10"
+                          >
+                            🔊 Preview
+                          </Button>
+                        )}
+                      </div>
+                    </button>
+                  </div>
+                ))}
               </div>
             </Card>
 

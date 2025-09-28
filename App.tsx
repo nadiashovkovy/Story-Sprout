@@ -16,6 +16,7 @@ export interface CharacterData {
   culturalBackground: string;
   accessibility: string[];
   personalityTrait: string;
+  voiceId: string;
 }
 
 export interface StoryProgress {
@@ -38,6 +39,7 @@ export default function App() {
     culturalBackground: "",
     accessibility: [],
     personalityTrait: "",
+    voiceId: "",
   });
 
   const [storyProgress, setStoryProgress] =

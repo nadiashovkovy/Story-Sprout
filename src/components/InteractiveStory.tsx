@@ -71,7 +71,7 @@ export function InteractiveStory({ onNavigate, character, storyProgress, onStory
       });
       
       const audio = await client.textToSpeech.convert(
-        "pNInz6obpgDQGcFmaJgB", // Rachel's voice ID
+        character.voiceId || "pNInz6obpgDQGcFmaJgB", // Use selected voice or default to Rachel's voice
         {
           text: text,
           modelId: "eleven_multilingual_v2"
